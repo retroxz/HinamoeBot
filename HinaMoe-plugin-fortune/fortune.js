@@ -65,7 +65,7 @@ function fortune(message) {
 module.exports = function (ctx) {
     const mirai = ctx.mirai
     mirai.on('GroupMessage', msg => {
-        if(msg.plain.indexOf('/求签') !== -1){
+        if(check.check.includes(msg.plain, "/求签")){
             try {
                 msg.reply(fortune(msg))
             }catch (e) {
