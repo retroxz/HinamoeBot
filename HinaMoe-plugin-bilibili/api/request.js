@@ -27,18 +27,4 @@ axios.interceptors.response.use(response => {
 }
 
 
-exports.getLiveInfo = function (){
-  axios.post('https://api.live.bilibili.com/room/v1/Room/get_info', {
-    id:22603245
-  }).then(function (response) {
-    console.log(response)
-  })
-}
-
-exports.test = async function () {
-  // const res = await axios.get('http://api.live.bilibili.com/room/v1/Room/getRoomInfoOld?mid=1265680561')
-  this.getLiveInfo()
-  // console.log(res.data);
-}
-
 module.exports = request
