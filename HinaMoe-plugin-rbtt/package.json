@@ -1,0 +1,19 @@
+{
+  "name": "hinamoe-plugin-rbtt",
+  "version": "1.0.0",
+  "description": "写着玩的熊兔贴贴插件",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/retroxz/HinaMoe-plugins.git"
+  },
+  "author": "retroxz <zzxee666@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/retroxz/HinaMoe-plugins/issues"
+  },
+  "homepage": "https://github.com/retroxz/HinaMoe-plugins#readme"
+}
