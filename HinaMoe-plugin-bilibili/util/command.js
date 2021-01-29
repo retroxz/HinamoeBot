@@ -1,25 +1,39 @@
+const mt = require('mirai-ts')
+
 // 指令实现
 const biliSpace = require('../api/space')
 // 指令map
 const commandsMap = new Map()
 
+/**
+ * 查询用户信息
+ * @param message
+ * @returns {Promise<void>}
+ */
 exports.searchUidInfo = async function (message) {
-  // Todo 加入用户头像和粉丝数的显示
   // 截取用户消息文本 获取到指令参数
-  const uid = message.plain.split('uid信息')[1]
-  // 发送请求
+  const uid = message.plain.split('用户信息')[1]
+  // 发送请求 请求基本信息和粉丝数
   if(!uid) return
-  const res = await biliSpace.spaceInfo(uid)
   // 验证返回
-  let replyMessage = res.code === 0?
-    `用户UID: ${res.data.mid}\n昵称: ${res.data.name}\n签名: ${res.data.sign}\n等级: ${res.data.level}\n个人空间: https://space.bilibili.com/${uid}\n直播间: ${res.data.live_room.url}`:
-    `找不到uid为: [${uid}]的用户信息`
-  // 回复消息
-  message.reply(replyMessage)
+  let replyMessage = ''
+  try {
+    const baseInfo = await biliSpace.spaceInfo(uid)
+    const cardInfo = await biliSpace.spaceInfoWithFans(uid)
+    replyMessage = `用户UID: ${baseInfo.data.mid}\n昵称: ${baseInfo.data.name}\n签名: ${baseInfo.data.sign}\n等级: ${baseInfo.data.level}\n粉丝数：${cardInfo.data.card.fans}\n
+      关注数：${cardInfo.data.card.friend}\n个人空间: https://space.bilibili.com/${uid}\n直播间: ${baseInfo.data.live_room.url}`
+    const face = mt.Message.Image('',cardInfo.data.card.face)
+    // 回复消息
+    message.reply([mt.Message.Plain(replyMessage),face])
+  }catch (e){
+    replyMessage = `找不到uid为: [${uid}]的用户信息`
+    // 回复消息
+    message.reply([mt.Message.Plain(replyMessage)])
+  }
 }
 
 // 注册指令
-commandsMap.set('uid信息',exports.searchUidInfo)
+commandsMap.set('用户信息',exports.searchUidInfo)
 
 /**
  * 指令匹配
