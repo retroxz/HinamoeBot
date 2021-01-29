@@ -22,7 +22,7 @@ module.exports = async function (ctx) {
   // const messageres = await mirai.api.sendGroupMessage([Message.Voice(res.voiceId)],1092438484)
   // console.log(messageres)
   // console.log(await biliLive.roomInfo(22603245))
-  mirai.on('GroupMessage',async msg => {
+  mirai.on('message',async msg => {
     Commands.match(msg)
   })
 }
