@@ -2,55 +2,44 @@
 
 package com.sepeach.hinamoe.plugin.spam
 
-import kotlinx.serialization.Serializable
-import net.mamoe.mirai.Bot
-import net.mamoe.mirai.console.command.CommandManager.INSTANCE.register
-import net.mamoe.mirai.console.command.CommandManager.INSTANCE.unregister
-import net.mamoe.mirai.console.command.CommandSender
-import net.mamoe.mirai.console.command.CompositeCommand
-import net.mamoe.mirai.console.command.ConsoleCommandSender
-import net.mamoe.mirai.console.command.SimpleCommand
-import net.mamoe.mirai.console.data.AutoSavePluginData
-import net.mamoe.mirai.console.data.PluginDataExtensions.mapKeys
-import net.mamoe.mirai.console.data.PluginDataExtensions.withEmptyDefault
-import net.mamoe.mirai.console.data.ReadOnlyPluginConfig
-import net.mamoe.mirai.console.data.ValueDescription
-import net.mamoe.mirai.console.data.value
-import net.mamoe.mirai.console.permission.PermissionService
-import net.mamoe.mirai.console.permission.PermissionService.Companion.hasPermission
+
 import net.mamoe.mirai.console.plugin.jvm.JvmPluginDescription
 import net.mamoe.mirai.console.plugin.jvm.KotlinPlugin
 import net.mamoe.mirai.console.util.ConsoleExperimentalApi
-import net.mamoe.mirai.console.util.scopeWith
-import net.mamoe.mirai.contact.Member
-import net.mamoe.mirai.message.data.Image
+import net.mamoe.mirai.event.GlobalEventChannel
+import net.mamoe.mirai.event.events.GroupMessageEvent
 import net.mamoe.mirai.utils.info
-
-/*
-// 定义主类方法 1, 显式提供信息
-
-object MyPluginMain2: KotlinPlugin(
-    JvmPluginDescription(
-        "org.example.my-plugin",
-        "1.0"
-    )
-)
-*/
-
-// 定义主类方法 2, 使用 `JvmPluginDescription.loadFromResource()` 从 resources/plugin.yml 加载
 
 object Main : KotlinPlugin(
     @OptIn(ConsoleExperimentalApi::class)
     JvmPluginDescription.loadFromResource()
 ) {
-
+    // 记录相同消息数量
+    private var  sameMessageMap = mutableMapOf<Long,Map<String,*>>()
+    private var oldMiraiCode = ""
     override fun onEnable() {
-        // 请不要使用 println, System.out.println 等标准输出方式. 请总是使用 logger.
-
-
-    }
-
-    override fun onDisable() {
+        logger.info { "[Plugin]雏萌复读插件Loaded..." }
+        // 注册群消息监听
+        GlobalEventChannel.subscribeAlways<GroupMessageEvent> {
+            run {
+                // 保存消息报文
+                val currentMiraiCode = message.serializeToMiraiCode()
+                val currentGroupId:Long = sender.group.id
+                if(currentMiraiCode != ""){
+                    if(currentMiraiCode == sameMessageMap[currentGroupId]?.get("old")){
+                        // 保存对应群
+                        val currentCount:Int = sameMessageMap[currentGroupId]?.get("count") as Int
+                        sameMessageMap[currentGroupId] = mutableMapOf("old" to currentMiraiCode,"count" to currentCount + 1,"chain" to message)
+                    }else{
+                        oldMiraiCode = currentMiraiCode
+                        sameMessageMap[currentGroupId] = mutableMapOf("old" to currentMiraiCode,"count" to 1,"chain" to message)
+                    }
+                }
+                if(sameMessageMap[currentGroupId]?.get("count") == 3){
+                    subject.sendMessage(message)
+                }
+            }
+        }
     }
 }
 

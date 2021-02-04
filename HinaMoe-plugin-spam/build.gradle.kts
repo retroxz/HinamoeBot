@@ -14,7 +14,7 @@ mirai {
 kotlin.sourceSets.all { languageSettings.useExperimentalAnnotation("kotlin.RequiresOptIn") }
 
 group = "com.sepeach.hinamoe.plugin.spam"
-version = "0.1.0"
+version = "1.0.0"
 
 repositories {
     mavenLocal()
