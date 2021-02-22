@@ -1,0 +1,10 @@
+# Project exclude paths
+/.gradle/
+/build/
+/.idea/
+/test/
+/out/
+/src/test
+device.json
+/logs
+/config
