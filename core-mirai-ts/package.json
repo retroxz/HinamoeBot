@@ -32,9 +32,13 @@
   },
   "homepage": "https://github.com/ElpsyCN/el-bot-template#readme",
   "dependencies": {
-    "el-bot": "^0.8.0-alpha.8"
+    "el-bot": "^0.8.0-alpha.8",
+    "mirai-ts": "^1.0.0-beta.4",
+    "mysql": "^2.18.1",
+    "redis": "^3.0.2"
   },
   "devDependencies": {
+    "axios": "^0.21.1",
     "dotenv": "^8.2.0",
     "eslint": "^7.20.0",
     "eslint-config-prettier": "^7.2.0",
