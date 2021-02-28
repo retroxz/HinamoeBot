@@ -1,10 +1,9 @@
 const mt = require('mirai-ts')
-const Util = require('./util')
+
 const biliSpace = require('../api/space')
 const biliSearch = require('../api/search')
-const MESSAGE_SCOPE = require('../scope/MessageEvent')
-const SUBSCRIBE_SCOPE = require('../scope/SubscribeType')
-const subscribesModel = require('../model/Subscribes')
+const subscribeService = require('../service/subscribes')
+const SUBSCRIBE_SCOPE = require('../enum/SubscribeType')
 // 指令map
 const commandsMap = new Map()
 
@@ -45,101 +44,79 @@ exports.searchUidInfo = async function (message) {
 /**
  * 添加直播订阅
  * @param message
+ * @returns {Promise<void>}
  */
 exports.addLiveSubscribe = async function (message) {
-    // 截取用户消息文本 获取到指令参数
-    // 用户信息对象
-    try {
-        let userInfo = {}
-        let replyMessage = ''
-        let uid = message.plain.split('订阅直播')[1]
-        if (!uid) return
-        if (isNaN(parseInt(uid))) {
-            // 输入的是昵称 获取uid
-            const searchRes = await biliSearch.searchUser(uid)
-            if (!searchRes.data.result)
-                throw new Error(`找不到uid为: [${uid}]的用户信息`)
-            uid = searchRes.data.result[0].mid
-        }
-        // 查询该条信息是否订阅过
-        const existRes = await subscribesModel.querySubscribeExist({
-            type: SUBSCRIBE_SCOPE.LIVE,
-            groupId: message.sender.group.id,
-            uid
-        })
-        if (existRes[0])
-            throw new Error(`[${message.sender.group.name}](${existRes[0].qid})已经订阅过${existRes[0].nick_name}的直播`)
-        // 搜索用户信息
-        userInfo.uid = uid
-        const infoRes = await biliSpace.spaceInfo(userInfo.uid)
-        // 保存昵称和直播间号
-        userInfo.roomId = infoRes.data.live_room.roomid
-        userInfo.nick = infoRes.data.name
-        // 生成参数
-        const currentDate = new Date()
-        if (message.type === MESSAGE_SCOPE.GROUP_MESSAGE.TYPE) {
-            // 群订阅
-            userInfo.qid = message.sender.group.id
-            userInfo.qnick = message.sender.group.name
-            userInfo.operatorNick = message.sender.memberName
-        }
-        userInfo.type = SUBSCRIBE_SCOPE.LIVE
-        userInfo.qtype = MESSAGE_SCOPE.GROUP_MESSAGE.ID
-        userInfo.operatorId = message.sender.id
-        userInfo.createTime = Util.getCurrentDateString()
-        // 写入数据库
-        let status = '失败'
-        const res = await subscribesModel.add(userInfo)
-        if (res.affectedRows === 1) {
-            status = '成功'
-        }
-        replyMessage = `[${userInfo.qnick}](${userInfo.qid})订阅[${userInfo.nick}]直播${status}！\n直播间：https://live.bilibili.com/${userInfo.roomId}`
-        // 发送返回信息
-        message.reply(replyMessage)
-    } catch (e) {
-        message.reply(e.message)
-    }
+    await subscribeService.addSubscribe({
+        type: SUBSCRIBE_SCOPE.LIVE,
+        command: '订阅直播',
+        message
+    })
 }
 
 /**
- * 删除直播订阅
+ * 添加动态订阅
  * @param message
  * @returns {Promise<void>}
  */
-exports.deleteLiveSubscribe = async function deleteLiveSubscribe(message) {
-    try {
-        let replyMessage = ''
-        let searchRes = {}
-        let uid = message.plain.split('取消订阅直播')[1]
-        if (!uid) return
-        if (isNaN(parseInt(uid))) {
-            // 输入的是昵称 获取uid
-            searchRes = await biliSearch.searchUser(uid)
-            if (!searchRes.data.result) {
-                throw new Error(`找不到uid为: [${uid}]的用户信息`)
-            }
-            uid = searchRes.data.result[0].mid
-        }
-        // 查询该条信息是否订阅过
-        const existRes = await subscribesModel.querySubscribeExist({
-            type: SUBSCRIBE_SCOPE.LIVE,
-            groupId: message.sender.group.id,
-            uid
-        })
-        if (!existRes[0])
-            throw new Error(`[${message.sender.group.name}](${message.sender.group.id})没有订阅过该直播`)
-        // 删除订阅
-        const deleteRes = await subscribesModel.deleteSubscribeExist({
-            type: SUBSCRIBE_SCOPE.LIVE,
-            groupId: message.sender.group.id,
-            uid
-        })
-        replyMessage = `群[${message.sender.group.name}]取消订阅直播[${existRes[0].nick_name}]${deleteRes.affectedRows ? '成功' : '失败'}!`
-        message.reply(replyMessage)
-    } catch (e) {
-        message.reply(e.message)
-    }
+exports.addDynamicSubscribe = async function(message){
+    await subscribeService.addSubscribe({
+        type: SUBSCRIBE_SCOPE.DYNAMIC,
+        command: '订阅动态',
+        message
+    })
+}
 
+/**
+ * 添加视频订阅
+ * @param message
+ * @returns {Promise<void>}
+ */
+exports.addVideoSubscribe = async function(message){
+    await subscribeService.addSubscribe({
+        type: SUBSCRIBE_SCOPE.VIDEO,
+        command: '订阅视频',
+        message
+    })
+}
+
+/**
+ * 取消订阅直播
+ * @param message
+ * @returns {Promise<void>}
+ */
+exports.deleteLiveSubscribe = async function(message){
+    await subscribeService.deleteSubscribe({
+        type: SUBSCRIBE_SCOPE.LIVE,
+        command: '取消订阅直播',
+        message
+    })
+}
+
+/**
+ * 取消订阅动态
+ * @param message
+ * @returns {Promise<void>}
+ */
+exports.deleteDynamicSubscribe = async function(message){
+    await subscribeService.deleteSubscribe({
+        type: SUBSCRIBE_SCOPE.DYNAMIC,
+        command: '取消订阅动态',
+        message
+    })
+}
+
+/**
+ * 取消订阅视频
+ * @param message
+ * @returns {Promise<void>}
+ */
+exports.deleteVideoSubscribe = async function(message){
+    await subscribeService.deleteSubscribe({
+        type: SUBSCRIBE_SCOPE.VIDEO,
+        command: '取消订阅视频',
+        message
+    })
 }
 
 /**
@@ -147,27 +124,48 @@ exports.deleteLiveSubscribe = async function deleteLiveSubscribe(message) {
  * @param message
  * @returns {Promise<void>}
  */
-exports.showLiveSubscribeList = async function showLiveSubscribeList(message) {
-    try{
-        let replyMessage = `群[${message.sender.group.name}]直播订阅列表:\n`
-        if (message.plain !== '直播订阅列表')
-            return
-        const list = await subscribesModel.querySubscribeExist({filed: 'nick_name,uid', type: SUBSCRIBE_SCOPE.LIVE, groupId: message.sender.group.id, uid: '%'})
-        if(list.length === 0){
-            throw new Error(`群[${message.sender.group.name}]没有订阅任何直播!`)
-        }
-        for (let index = 0,len = list.length;index < len;index++)
-            replyMessage += `${index + 1}. ${list[index]['nick_name']}(${list[index]['uid']})\n`
-        message.reply(replyMessage)
-    }catch (e) {
-        message.reply(e.message)
-    }
+exports.showLiveSubscribeList = async function(message){
+    await subscribeService.showSubscribeList({
+        type: SUBSCRIBE_SCOPE.LIVE,
+        message
+    })
 }
+
+/**
+ * 动态订阅列表
+ * @param message
+ * @returns {Promise<void>}
+ */
+exports.showDynamicSubscribeList = async function(message){
+    await subscribeService.showSubscribeList({
+        type: SUBSCRIBE_SCOPE.DYNAMIC,
+        message
+    })
+}
+
+/**
+ * 视频订阅列表
+ * @param message
+ * @returns {Promise<void>}
+ */
+exports.showVideoSubscribeList = async function(message){
+    await subscribeService.showSubscribeList({
+        type: SUBSCRIBE_SCOPE.VIDEO,
+        message
+    })
+}
+
 // 注册指令
 commandsMap.set('用户信息', exports.searchUidInfo)
 commandsMap.set('订阅直播', exports.addLiveSubscribe)
+commandsMap.set('订阅动态', exports.addDynamicSubscribe)
+commandsMap.set('订阅视频', exports.addVideoSubscribe)
 commandsMap.set('取消订阅直播', exports.deleteLiveSubscribe)
+commandsMap.set('取消订阅动态', exports.deleteDynamicSubscribe)
+commandsMap.set('取消订阅视频', exports.deleteVideoSubscribe)
 commandsMap.set('直播订阅列表', exports.showLiveSubscribeList)
+commandsMap.set('动态订阅列表', exports.showDynamicSubscribeList)
+commandsMap.set('视频订阅列表', exports.showVideoSubscribeList)
 
 /**
  * 指令匹配
