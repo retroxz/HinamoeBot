@@ -40,7 +40,6 @@ exports.danmakuRandom = async function (message) {
         let uname = ''
         if (isNaN(parseInt(uid))) {
             const searchRes = await BiliSearch.searchUser(uid)
-            console.log(searchRes.data)
             if(!searchRes.data.hasOwnProperty('result'))
                 throw new Error(`找不到用户${uid}`)
             uname = uid

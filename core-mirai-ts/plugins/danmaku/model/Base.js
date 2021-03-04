@@ -12,8 +12,10 @@ exports.query = function (sql, params) {
             conn.query(sql, params, (err, rows) => {
                 if (err) {
                     reject(err)
+                    conn.release()
                 } else {
                     resolve(rows)
+                    conn.release()
                 }
             })
 
