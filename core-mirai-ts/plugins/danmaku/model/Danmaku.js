@@ -10,6 +10,6 @@ exports.danmakuRankByDate = async function (currentDate = new Date()) {
 }
 // 随机某人弹幕十条
 exports.randomDanmakuByUser = async function (uid) {
-    let sql = `SELECT FROM_UNIXTIME(\`timestamp\`/1000,'%Y-%m-%d %h:%i:%s') AS 'timestamp',msg FROM bili_danmaku WHERE uid=? AND room_id=22603245 ORDER BY rand() limit 10 `
+    let sql = `SELECT FROM_UNIXTIME(\`timestamp\`/1000,'%Y-%m-%d') AS 'timestamp',msg FROM bili_danmaku WHERE uid=? AND room_id=22603245 ORDER BY rand() limit 10 `
     return await Base.query(sql, [uid])
 }

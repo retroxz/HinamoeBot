@@ -1,6 +1,9 @@
 const commandsMap = new Map()
 const Util = require('./utils')
 const DanmakuModel = require('./model/Danmaku')
+const BiliSearch = require('./api/search')
+const BiliSpace = require('./api/space')
+
 
 exports.danmakuRank = async function (message) {
     const dateRegex = '(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])'
@@ -31,18 +34,35 @@ exports.danmakuRank = async function (message) {
     }
 }
 exports.danmakuRandom = async function (message) {
-    const uid = message.plain.split('弹幕语录')[1].replace(' ', '')
-    let replyMsg = `${uid}的弹幕语录:\n`
-    if (isNaN(parseInt(uid))) {
-        throw new Error('暂时只可以输入uid查询')
+    try {
+        let uid = message.plain.split('弹幕语录')[1].replace(' ', '')
+        if (!uid) return
+        let uname = ''
+        if (isNaN(parseInt(uid))) {
+            const searchRes = await BiliSearch.searchUser(uid)
+            console.log(searchRes.data)
+            if(!searchRes.data.hasOwnProperty('result'))
+                throw new Error(`找不到用户${uid}`)
+            uname = uid
+            uid = searchRes.data.result[0].mid
+        }else{
+            const spaceRes = await BiliSpace.spaceInfo(uid)
+            if(spaceRes.code === -404)
+                throw new Error(`找不到用户${uid}`)
+            uname = spaceRes.data.name
+        }
+        let replyMsg = `${uname}的弹幕语录:\n`
+        const res = await DanmakuModel.randomDanmakuByUser(uid)
+        if(res.length === 0)
+            throw new Error(`找不到${uname}的弹幕记录`)
+        for(let i = 0,len = res.length; i < len;i++){
+            replyMsg += `${res[i]['timestamp']}:${res[i]['msg']}\n`
+        }
+        message.reply(replyMsg)
+    }catch (e) {
+        message.reply(e.message)
     }
-    const res = await DanmakuModel.randomDanmakuByUser(uid)
-    if(res.length === 0)
-        throw new Error(`找不到uid: ${uid}的弹幕记录`)
-    for(let i = 0,len = res.length; i < len;i++){
-        replyMsg += `${res[i]['timestamp']}:${res[i]['msg']}\n`
-    }
-    message.reply(replyMsg)
+
 }
 commandsMap.set('弹幕排行', exports.danmakuRank)
 commandsMap.set('弹幕语录', exports.danmakuRandom)

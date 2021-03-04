@@ -3,7 +3,7 @@ const pool = mysql.createPool({
     host: process.env.DATABASE_HOST,
     user: process.env.DATABASE_USERNAME,
     password: process.env.DATABASE_PASSWORD,
-    database: process.env.DATABASE_NAME
+    database: process.env.DANMAKU_DATABASE_NAME
 })
 
 exports.query = function (sql, params) {
