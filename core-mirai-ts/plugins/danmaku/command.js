@@ -30,7 +30,22 @@ exports.danmakuRank = async function (message) {
         message.reply(e.message)
     }
 }
+exports.danmakuRandom = async function (message) {
+    const uid = message.plain.split('弹幕语录')[1].replace(' ', '')
+    let replyMsg = `${uid}的弹幕语录:\n`
+    if (isNaN(parseInt(uid))) {
+        throw new Error('暂时只可以输入uid查询')
+    }
+    const res = await DanmakuModel.randomDanmakuByUser(uid)
+    if(res.length === 0)
+        throw new Error(`找不到uid: ${uid}的弹幕记录`)
+    for(let i = 0,len = res.length; i < len;i++){
+        replyMsg += `${res[i]['timestamp']}:${res[i]['msg']}\n`
+    }
+    message.reply(replyMsg)
+}
 commandsMap.set('弹幕排行', exports.danmakuRank)
+commandsMap.set('弹幕语录', exports.danmakuRandom)
 
 exports.match = function (message) {
     const plain = message.plain
