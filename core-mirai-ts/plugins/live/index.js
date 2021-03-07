@@ -10,7 +10,6 @@ module.exports = async function (ctx) {
 function listenLiveStatus(config){
     config.forEach(async function (data){
         let res = await LiveApi.getLiveRoomInfoasync(data.live)
-        console.log(res)
         const currentLiveTime = res.data.room_info.live_start_time
        if(res.data.room_info.live_status !== 0){
            if(currentLiveTime === lastLiveTimeMap[data.live]){
