@@ -1,5 +1,6 @@
 const { default: Bot } = require("el-bot");
 const el = require("./el");
+const GitHook = require("./el/githook")
 
 // @ts-ignore
 const bot = new Bot(el);
@@ -9,6 +10,9 @@ bot.start();
 bot.mirai.on("message", (msg) => {
   log(msg)
 })
+
+// 启动GitHook
+GitHook.start()
 
 function log(message){
   switch (message.type){

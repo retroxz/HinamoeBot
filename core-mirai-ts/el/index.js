@@ -6,9 +6,6 @@ module.exports = {
   qq: parseInt(process.env.BOT_QQ),
   // 你可以直接解析 mirai-api-http 的配置
   setting: "./config/http.yml",
-  // setting: {
-  //   enableWebsocket: false, // 须与 mirai-api-http 的配置保持一致，若 mirai 已设置为 true，则此处也应为 true
-  // },
   db: {
     // 默认关闭
     enable: false,
@@ -18,9 +15,9 @@ module.exports = {
   bot: utils.config.parse(resolve(__dirname, "../config/app.yml")),
   // webhook
   webhook: {
-    enable: true,
+    enable: false,
     path: "/webhook",
     port: 7777,
-    secret: "el-psy-congroo",
+    secret: process.env.WEBHOOK_SECRET
   },
 };

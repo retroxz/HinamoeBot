@@ -33,8 +33,10 @@
     "homepage": "https://github.com/ElpsyCN/el-bot-template#readme",
     "dependencies": {
         "el-bot": "^0.8.0-alpha.9",
+        "github-webhook-handler": "^1.0.0",
         "mirai-ts": "^1.0.0-beta.7",
-        "mysql": "^2.18.1"
+        "mysql": "^2.18.1",
+        "yamljs": "^0.3.0"
     },
     "devDependencies": {
         "dotenv": "^8.2.0",
