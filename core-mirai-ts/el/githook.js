@@ -35,7 +35,7 @@ exports.start = function (){
         console.log('Received a push event for %s to %s',
             event.payload.repository.name,
             event.payload.ref)
-        let message = `仓库[${event.payload.repository.name}]push更新\n分支: ${event.payload.ref}\n提交人: ${event.pusher.name}(${event.pusher.email})\n提交信息: ${event.head_commit.message}\n${repository.url}`
+        let message = `仓库[${event.payload.repository.name}]push更新\n分支: ${event.payload.ref}\n提交人: ${event.payload.pusher.name}(${event.payload.pusher.email})\n提交信息: ${event.payload.head_commit.message}\n${event.payload.repository.url}`
         sendMessage(message)
     })
 
