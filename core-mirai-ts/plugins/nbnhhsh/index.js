@@ -1,14 +1,12 @@
 const {default: Bot} = require('el-bot')
 const {check, Message} = require("mirai-ts");
-const axios =  require("axios");
-const request = axios.create()
 const COMMAND = '/好好说话'
 
+const axios =  require("axios");
+const request = axios.create()
 async function guess(text) {
     const API_URL = "https://lab.magiconch.com/api/nbnhhsh/guess";
-    const resp =  await request.post(API_URL, {
-        text,
-    })
+    const resp =  await request.post(API_URL, { text })
     return resp.data
 }
 
@@ -19,7 +17,7 @@ async function guess(text) {
 module.exports =  function (ctx) {
     const mirai = ctx.mirai
     mirai.on('message', async (msg) => {
-        // try {
+        try {
             if (check.re(msg.plain, `^${COMMAND}.*`)) {
                 const keyword = msg.plain.split(COMMAND)[1].replace(/\s+/g, '')
                 if (keyword.search("[\u4e00-\u9fa5]") != -1 || !keyword) {
@@ -32,8 +30,8 @@ module.exports =  function (ctx) {
                 // @ts-ignore
                 msg.reply([Message.At(msg.sender.id), Message.Plain(replyMessage)])
             }
-        // } catch (e) {
-        //     msg.reply(e.message)
-        // }
+        } catch (e) {
+            msg.reply(e.message)
+        }
     })
 }

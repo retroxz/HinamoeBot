@@ -1,11 +1,12 @@
 const axios = require('axios')
+const DanmakuApi = axios.create()
 
-axios.defaults.withCredentials = true; //配置为true
+DanmakuApi.withCredentials = true; //配置为true
 
 /**
  * 请求拦截
  */
-axios.interceptors.response.use(response => {
+DanmakuApi.interceptors.response.use(response => {
   return response.data
 }, error => {
   return Promise.reject(error);
@@ -19,7 +20,7 @@ axios.interceptors.response.use(response => {
  * @returns {Promise<void>}
  */
  async function request({url, data = {}, method = 'GET'}) {
-  return await axios.request({
+  return await DanmakuApi.request({
     url: url,
     method: method,
     params: data

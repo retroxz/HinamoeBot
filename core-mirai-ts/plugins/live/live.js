@@ -1,7 +1,7 @@
 const axios = require('axios')
 const Axios = axios.create()
 
-Axios.defaults.withCredentials = true; //配置为true
+Axios.withCredentials = true; //配置为true
 
 /**
  * 请求拦截
