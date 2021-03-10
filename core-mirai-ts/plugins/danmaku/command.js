@@ -4,6 +4,7 @@ const Util = require('./utils')
 const DanmakuModel = require('./model/Danmaku')
 const BiliSearch = require('./api/search')
 const BiliSpace = require('./api/space')
+// 弹幕库插件默认直播间
 let roomId = 22603245
 
 exports.danmakuRank = async function (message) {

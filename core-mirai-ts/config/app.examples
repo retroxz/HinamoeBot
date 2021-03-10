@@ -1,3 +1,42 @@
+# 插件配置
 plugins:
+# el-bot 默认插件
+  default:
+#    - forward
   custom:
+#    - ./plugins/greeting/index
+#    - ./plugins/bilibili/index
+#    - ./plugins/danmaku/index
+#    - ./plugins/live/index
+#    - ./plugins/nbnhhsh/index
+#    - ./plugins/fortune/index
+
+# 主人QQ
+master:
+  -
+# 转发插件
+forward:
+  - listen:
+      group:
+    target:
+      friend:
+      group:
+# 直播监听插件
+live:
+    -
+        # 监听直播间
+        live: 22603245
+        # 推送QQ群 (必须有管理员权限)
+        group:
+            - 123456
+# githook 推送配置
+githook:
+    secret: EchoNeverDie
+    port: 8888
+    groupId: 1092438484
+# 弹幕库配置 为某个群特别指定直播间
+danmaku:
+    -
+        group: 123456
+        listen: 22637920
 
