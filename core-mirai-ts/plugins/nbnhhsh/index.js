@@ -18,14 +18,21 @@ async function guess(text) {
 module.exports =  function (ctx) {
     const mirai = ctx.mirai
     mirai.on('message', async (msg) => {
+        let replyMessage = '看不懂 嘻嘻'
         try {
-            if (check.re(msg.plain, `^(/${COMMAND})|${COMMAND}.*`)) {
+            if (check.re(msg.plain, `^(/${COMMAND}|${COMMAND}).*`)) {
                 const keyword = msg.plain.split(COMMAND)[1].replace(/\s+/g, '')
                 if (keyword.search("[\u4e00-\u9fa5]") !== -1 || !keyword) {
                     throw new Error("看不懂 嘻嘻")
                 }
                 const data = await guess(keyword);
-                let replyMessage = data.length == 0 ? "看不懂 嘻嘻" : `【${keyword}】的意思可能是\n【${data[0].trans.toString()}】`
+                if (data.length !== 0) {
+                    if(data[0].trans){
+                        replyMessage = `【${keyword}】的意思可能是\n【${data[0].trans.toString()}】`
+                    }else if(data[0].inputting){
+                        replyMessage = `【${keyword}】的意思可能是\n【${data[0].inputting.toString()}】`
+                    }
+                }
                 msg.reply([Message.At(msg.sender.id), Message.Plain(replyMessage)])
             }
         } catch (e) {
