@@ -34,18 +34,23 @@
     "dependencies": {
         "axios": "^0.21.1",
         "blueimp-md5": "^2.18.0",
+        "body-parser": "^1.19.0",
+        "cors": "^2.8.5",
         "el-bot": "^0.8.0-alpha.9",
+        "express": "^4.17.1",
+        "express-validator": "^6.10.0",
         "github-webhook-handler": "^1.0.0",
-        "mirai-ts": "^1.0.0-beta.7",
-        "mysql": "^2.18.1"
+        "mirai-ts": "^1.0.3",
+        "mysql": "^2.18.1",
+        "string-random": "^0.1.3"
     },
     "devDependencies": {
         "dotenv": "^8.2.0",
+        "el-bot": "^0.8.0-alpha.9",
         "eslint": "^7.20.0",
         "eslint-config-prettier": "^7.2.0",
+        "mirai-ts": "^1.0.3",
         "nodemon": "^2.0.7",
-        "prettier": "^2.2.1",
-        "mirai-ts": "^1.0.0-beta.7",
-        "el-bot": "^0.8.0-alpha.9"
+        "prettier": "^2.2.1"
     }
 }
