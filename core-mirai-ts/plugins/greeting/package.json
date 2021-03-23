@@ -1,0 +1,11 @@
+{
+    "name": "hinamoe-plugins-greeting",
+    "version": "0.0.1",
+    "description": "雏萌问候插件",
+    "main": "index.js",
+    "author": {
+        "name":"retroxz",
+        "email": "zzxee666@gmail.com"
+    },
+    "license": "MIT"
+}

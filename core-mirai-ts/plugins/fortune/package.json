@@ -1,0 +1,11 @@
+{
+    "name": "hinamoe-plugins-fortune",
+    "version": "1.0.0",
+    "description": "雏萌求签插件",
+    "main": "index.js",
+    "author": {
+        "name":"retroxz",
+        "email": "zzxee666@gmail.com"
+    },
+    "license": "MIT"
+}

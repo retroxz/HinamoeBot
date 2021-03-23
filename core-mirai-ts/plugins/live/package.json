@@ -1,0 +1,11 @@
+{
+    "name": "hinamoe-plugins-live",
+    "version": "0.0.1",
+    "description": "雏萌直播艾特全体插件",
+    "main": "index.js",
+    "author": {
+        "name":"retroxz",
+        "email": "zzxee666@gmail.com"
+    },
+    "license": "MIT"
+}
