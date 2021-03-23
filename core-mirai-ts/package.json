@@ -1,7 +1,7 @@
 {
-    "name": "el-bot-template",
-    "version": "0.2.0",
-    "description": "el-bot 的快速启动模版",
+    "name": "hinamoe-bot",
+    "version": "0.0.1",
+    "description": "基于mirai-ts开发的群聊机器人",
     "private": true,
     "main": "index.js",
     "mcl": {
@@ -19,18 +19,17 @@
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/ElpsyCN/el-bot-template.git"
+        "url": "git+https://github.com/retroxz/HinamoeBot.git"
     },
     "author": {
-        "name": "YunYouJun",
-        "email": "me@yunyoujun.cn",
-        "url": "https://www.yunyoujun.cn"
+        "name": "retroxz",
+        "email": "zzxee666@gmail.com"
     },
-    "license": "AGPL-3.0",
+    "license": "MIT",
     "bugs": {
-        "url": "https://github.com/ElpsyCN/el-bot-template/issues"
+        "url": "https://github.com/retroxz/HinamoeBot/issues"
     },
-    "homepage": "https://github.com/ElpsyCN/el-bot-template#readme",
+    "homepage": "https://github.com/retroxz/HinamoeBot/blob/main/README.md",
     "dependencies": {
         "axios": "^0.21.1",
         "blueimp-md5": "^2.18.0",
