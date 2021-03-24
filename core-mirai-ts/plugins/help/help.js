@@ -3,7 +3,7 @@ const {Message} = require('mirai-ts')
 
 exports.match = function(message) {
     const plain = message.plain
-    if (!plain) return
+    if (!plain) return 
     for (let key of help.keys()) {
         if (plain.indexOf(key) === 0) {
             help.get(key)(message)
@@ -14,7 +14,10 @@ exports.match = function(message) {
 exports.hinamoeHelp = function (message) {
     let text = '======== 雏萌帮助 ========\n 发送以下内容获取详细帮助\n'
     for (let key of help.keys()) {
-        text += `${key}\n`
+        if（key === '雏萌帮助') continue
+        else{
+            text += `${key}\n`
+        }
     }
     message.reply(text)
 }
