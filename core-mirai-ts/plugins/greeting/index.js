@@ -114,7 +114,8 @@ async function getMorningTip(hours) {
     }
     // 整一句正能量
     const word = await Api.getYoungWords()
-    return `${morningTip}\n${word}`
+    // return `${morningTip}\n${word}`
+    return morningTip
 }
 
 async function getEveningTip(hours) {
@@ -125,6 +126,7 @@ async function getEveningTip(hours) {
         eveningTip = `竟然会这么健康的作息！`
     }
     // 整一句晚安祝福
-    const word = await Api.getNightWords()
-    return `${eveningTip}\n${word}`
+    // const word = await Api.getNightWords()
+    // return `${eveningTip}\n${word}`
+    return eveningTip
 }
