@@ -35,6 +35,14 @@ exports.queryLastGreetingLog = async function({groupId, senderId, type}){
     return res
 }
 
+exports.queryLastSleep = async function(){
+    let currentDate = new Date()
+    let startDateTime = getStartDateTime(currentDate)
+    let endDateTime = getEndDateTime(currentDate)
+    let sql = "SELECT group_id,sender_id,sender_name,create_time FROM greeting_log WHERE ( group_id, create_time ) IN ( SELECT group_id,max( create_time ) FROM greeting_log WHERE create_time BETWEEN ? AND ? AND type = 2 GROUP BY group_id)"
+    return await Base.query(sql,[startDateTime,endDateTime])
+}
+
 function getNextDate(date, day){
     let dd = new Date(date)
     dd.setDate(dd.getDate() + day)
