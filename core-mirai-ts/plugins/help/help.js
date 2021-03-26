@@ -68,7 +68,7 @@ exports.thankYou = function (message) {
 
 exports.sdMsgHelp = function (message) {
     let text = `沙雕语录功能
-    格式: 彩虹屁/朋友圈/毒鸡汤/祖安+任意内容`
+    格式: 彩虹屁/朋友圈/毒鸡汤/祖安`
     message.reply(text)
 }
 
