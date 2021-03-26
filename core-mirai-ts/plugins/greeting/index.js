@@ -39,7 +39,7 @@ async function goodMorning(message) {
     let lastLog = await GreetingModel.queryLastGreetingLog({groupId: message.sender.group.id,senderId: message.sender.id,type: 2})
     let greetingStation = getGreetingStation(currentDate, lastLog)
     //获取早安提示
-    let morningTip = getMorningTip(currentDate.getHours())
+    let morningTip = await getMorningTip(currentDate.getHours())
     let currentDateStr = `${currentDate.getFullYear()}-${currentDate.getMonth() + 1}-${currentDate.getDate()} ${currentDate.getHours()}:${currentDate.getMinutes()}:${currentDate.getSeconds()}`
     let currentRank = await GreetingModel.addGreetingLog({
         groupId: message.sender.group.id,
