@@ -66,10 +66,17 @@ exports.thankYou = function (message) {
     message.reply(text)
 }
 
+exports.sdMsgHelp = function (message) {
+    let text = `沙雕语录功能
+    格式: 彩虹屁/朋友圈/毒鸡汤/祖安+任意内容`
+    message.reply(text)
+}
+
 help.set("雏萌帮助", exports.hinamoeHelp)
 help.set("问候帮助", exports.greetingHelp)
 help.set("弹幕库帮助", exports.danmakuHelp)
 help.set("好好说话帮助", exports.hhshHelp)
 help.set("求签帮助", exports.fortuneHelp)
 help.set("按钮帮助", exports.buttonHelp)
+help.set("沙雕语录帮助", exports.sdMsgHelp)
 help.set("谢谢雏萌", exports.thankYou)
