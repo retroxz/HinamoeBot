@@ -4,8 +4,6 @@ const Util = require('./utils')
 const DanmakuModel = require('./model/Danmaku')
 const BiliSearch = require('./api/search')
 const BiliSpace = require('./api/space')
-// 弹幕库插件默认直播间
-let roomId = 22603245
 
 exports.danmakuRank = async function (message) {
     const dateRegex = '(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])'
@@ -23,7 +21,7 @@ exports.danmakuRank = async function (message) {
                 throw new Error('日期格式不对呀')
             }
         }
-        const res = await DanmakuModel.danmakuRankByDate(currentDate, roomId)
+        const res = await DanmakuModel.danmakuRankByDate(currentDate, currentRoomId(message))
         if (res.length === 0)
             throw new Error(`找不到${Util.getCurrentDateString(currentDate)}的弹幕记录！`)
         let replyMsg = `${Util.getCurrentDateString(currentDate)} 弹幕TOP10:\n`
@@ -53,7 +51,7 @@ exports.danmakuRandom = async function (message) {
             uname = spaceRes.data.name
         }
         let replyMsg = `${uname}的弹幕语录:\n`
-        const res = await DanmakuModel.randomDanmakuByUser(uid, roomId)
+        const res = await DanmakuModel.randomDanmakuByUser(uid, currentRoomId(message))
         if (res.length === 0)
             throw new Error(`找不到${uname}的弹幕记录`)
         for (let i = 0, len = res.length; i < len; i++) {
@@ -74,12 +72,6 @@ commandsMap.set('弹幕语录', exports.danmakuRandom)
 commandsMap.set('弹幕帮助', exports.danmakuHelp)
 
 exports.match = function (message) {
-    for (let i = 0, len = message.config.length; i < len; i++) {
-        if (message.config[i].group === message.sender.group.id) {
-            roomId = message.config[i].listen
-            break
-        }
-    }
     const plain = message.plain
     if (!plain) return
     for (let key of commandsMap.keys()) {
@@ -87,4 +79,16 @@ exports.match = function (message) {
             commandsMap.get(key)(message)
         }
     }
+}
+
+function currentRoomId(message) {
+    // 从配置中加载默认直播间
+    let roomId = message.config.default
+    for (let i = 0, len = message.config.custom.length; i < len; i++) {
+        if (message.config.custom[i].group === message.sender.group.id) {
+            roomId = message.config.custom[i].listen
+            break
+        }
+    }
+    return roomId
 }
