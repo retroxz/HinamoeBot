@@ -50,6 +50,10 @@ async function goodMorning(message) {
         morning_time: currentDateStr,
         create_time: currentDateStr
     })
+    if(currentRank == -1){
+        message.reply([Message.At(message.sender.id),Message.Plain(`你已经早安过了`)])
+        return
+    }
     console.log(`${message.sender.memberName}`)
     console.log(currentRank)
     message.reply([Message.At(message.sender.id),Message.Plain(`现在是: ${currentDate.getFullYear()}年${currentDate.getMonth() + 1}月${currentDate.getDate()}日 星期${weekZh[currentDate.getDay()]}\n 你是群里第【${currentRank}】位起床的哦${greetingStation} ${morningTip}`)])
@@ -84,6 +88,10 @@ async function goodNight(message) {
         morning_time: currentDateStr,
         create_time: currentDateStr
     })
+    if(currentRank == -1){
+        message.reply([Message.At(message.sender.id),Message.Plain(`你已经晚安过了`)])
+        return
+    }
     console.log(`${message.sender.memberName}`)
     console.log(currentRank)
     message.reply([Message.At(message.sender.id),Message.Plain(`现在是: ${currentDate.getFullYear()}年${currentDate.getMonth() + 1}月${currentDate.getDate()}日 星期${weekZh[currentDate.getDay()]}\n 你是群里第【${currentRank}】位睡觉的哦 ${eveningTip}`)])
