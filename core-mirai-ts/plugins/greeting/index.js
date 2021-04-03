@@ -66,7 +66,7 @@ async function goodMorning(message) {
 async function goodNight(message) {
     let currentDate = new Date()
     //判断晚安时间
-    if(currentDate.getHours() > 6 && currentDate.getHours() < 19){
+    if(currentDate.getHours() >= 6 && currentDate.getHours() < 19){
        message.reply([Message.At(message.sender.id),Message.Plain(`现在还不到睡觉的时间呀！`)])
        return
     }

@@ -67,7 +67,6 @@ function getStartDateTime(currentDate){
 function getEndDateTime(currentDate){
     let endDateTime, date
     if(currentDate.getHours() < 6){
-        date = getNextDate(currentDate, -1)
         endDateTime = `${currentDate.getFullYear()}-${currentDate.getMonth() + 1}-${currentDate.getDate()} 5:59:59`
     }else {
         date = getNextDate(currentDate, 1)
