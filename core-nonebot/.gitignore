@@ -139,3 +139,7 @@ dmypy.json
 .pytype/
 
 # End of https://www.toptal.com/developers/gitignore/api/python
+# 环境变量文件
+.env.dev
+.env.prod
+.env
