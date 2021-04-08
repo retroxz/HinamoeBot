@@ -56,7 +56,7 @@ async def mute_handle(bot: Bot, event: GroupMessageEvent, state):
 
 # 解除禁言
 unmute = on_command('unmute',rule=is_at())
-@unmute.handle():w
+@unmute.handle()
 async def unmute_handle(bot: Bot, event: GroupMessageEvent, state: T_State):
     await bot.call_api('set_group_ban', group_id=event.group_id, user_id=event.get_message()[0].data['qq'], duration=0)
 
