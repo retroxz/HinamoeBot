@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-#coding=utf-8  
+# coding=utf-8
 
 """
 @File: logger.py
@@ -9,8 +9,8 @@
 
 logger 工具类
 """
-
-
+import os
+from datetime import datetime
 import sys
 from datetime import datetime
 from rich import print
@@ -27,7 +27,11 @@ LOG_COLORS_CONFIG = {
 # 日志格式化设置
 LOG_FORMATTER = '[bold {}]{} ({}) {}[/bold {}]'
 
-def current_date(formatter = '%Y-%m-%d %H:%M:%S') -> str:
+# 日志目录
+LOG_DIR = './log'
+
+
+def current_date(formatter='%Y-%m-%d %H:%M:%S') -> str:
     """
     输出当前日期字符串
     :param formatter: 格式化字符串
@@ -43,14 +47,15 @@ def console(level, message):
     :param message: 日志内容
     :return:
     """
-    a = LOG_FORMATTER.format(
+    msg = LOG_FORMATTER.format(
         LOG_COLORS_CONFIG[level.upper()],
         current_date(),
         level,
         message,
         LOG_COLORS_CONFIG[level.upper()]
     )
-    print(a)
+    write_log_file(msg)
+    print(msg)
 
 
 def debug(message):
@@ -92,6 +97,7 @@ def error(message):
     method_name = sys._getframe().f_code.co_name
     console(method_name, message)
 
+
 def critical(message):
     """
     输CRITICAL等级日志
@@ -100,3 +106,15 @@ def critical(message):
     """
     method_name = sys._getframe().f_code.co_name
     console(method_name, message)
+
+
+def write_log_file(message):
+    """
+    写入日志
+    :param message:
+    :return:
+    """
+    if not os.path.exists(F"{LOG_DIR}/{datetime.now().strftime('%Y%m')}"):
+        os.makedirs(F"{LOG_DIR}/{datetime.now().strftime('%Y%m')}")
+    with open(F"{LOG_DIR}/{datetime.now().strftime('%Y%m')}/{datetime.now().strftime('%d')}.log", 'a', encoding='utf-8') as log_file:
+        log_file.write(F"{message}\n")

@@ -9,7 +9,6 @@ from nonebot.plugin import require
 from nonebot.adapters import Bot, Event
 from nonebot.typing import T_State
 from nonebot.adapters.cqhttp.message import MessageSegment, Message
-from utils import debug
 
 
 scheduler = require('nonebot_plugin_apscheduler').scheduler
@@ -28,13 +27,12 @@ station = {
 async def do_something():
     print(F'{__package__}插件已加载')
     scheduler.add_job(set_push_dynamic_task, 'cron', day_of_week='0-6', hour='0', minute='01')
-    debug('DEBUG等级日志')
 
 
 # 发送动态
 async def push_dynamic(dynamic_type):
     bot = list(nonebot.get_bots().values())[0]
-    await bot.call_api("send_group_msg", group_id=1092438484, message=F"{dynamic_type}")
+    await bot.call_api("send_group_msg", group_id=0, message=F"{dynamic_type}")
 
 
 # 生成发送动态定时任务
@@ -77,7 +75,5 @@ peach = on_startswith("桃宝", priority=5)  # 优先级为5
 async def handle_first_receive(bot: Bot, event: Event, state: T_State):
     await peach.send(MessageSegment.image
         (
-        'http://gchat.qpic.cn/gchatpic_new/541613058/1040339889-2214825272-646CC15E1B172E18A00E57D7F375935A/0?term=3'))
+        ''))
     print(os.getcwd())
-    # await bot.call_api("send_group_msg", group_id=event.group_id, message=F"{MessageSegment.image(
-    # '/core-nonebot/resource/images/1.png')}")
