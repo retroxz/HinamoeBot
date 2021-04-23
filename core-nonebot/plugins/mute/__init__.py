@@ -11,6 +11,14 @@ from nonebot.typing import T_State
 global_config = nonebot.get_driver().config
 
 
+driver = nonebot.get_driver()
+
+
+@driver.on_startup
+async def do_something():
+    print(F'{__package__}插件已加载')
+
+
 def is_at():
     """
     验证是否是艾特消息

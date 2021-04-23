@@ -12,8 +12,10 @@ driver = nonebot.get_driver()
 driver.register_adapter("cqhttp", CQHTTPBot)  # 使用go-cqhttp
 
 # 加载插件
-nonebot.load_builtin_plugins()
-nonebot.load_plugins("hinamoe/plugins")
+# nonebot.load_builtin_plugins()
+# nonebot.load_plugins("hinamoe/plugins")
+nonebot.load_plugin("plugins.spade_echo")
+# nonebot.load_plugin("hinamoe.plugins.fortune")
 
 app = nonebot.get_asgi()
 
