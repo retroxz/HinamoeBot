@@ -3,3 +3,6 @@ python_dateutil==2.8.1
 rich==10.1.0
 tinydb==4.4.0
 nonebot-adapter-cqhttp
+nonebot~=1.8.2
+httpx~=0.17.1
+python-dateutil~=2.8.1
