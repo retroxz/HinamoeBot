@@ -6,9 +6,11 @@ from nonebot.adapters.cqhttp.event import GroupBanNoticeEvent, GroupMessageEvent
 from nonebot.rule import Rule, to_me
 from nonebot.adapters import Bot, Event
 from nonebot.typing import T_State
-from nonebot.adapters.cqhttp.message import MessageSegment
+from nonebot.adapters.cqhttp.message import MessageSegment, Message
 from utils import Plugin_Data, info
+from utils.db import db_query
 from .config import defend_member
+import inspect
 
 driver = nonebot.get_driver()
 PLUGIN_NAME = __package__
@@ -80,54 +82,84 @@ listen_group_mute = on_notice(rule=is_group_mute_event())
 
 
 @listen_group_mute.handle()
-async def demo_handle(bot: Bot, event: GroupBanNoticeEvent, state):
+async def listen_group_mute_handle(bot: Bot, event: GroupBanNoticeEvent, state):
     # 查询此人是否受保护
-    if Plugin_Data(PLUGIN_NAME).query(defend_member(event.user_id, event.group_id)):
+    result = await db_query(F"""SELECT sender_id, sender_name FROM bot.mute_defend 
+                    WHERE group_id={event.group_id} AND sender_id={event.user_id}""")
+    if len(result):
         await bot.call_api('set_group_ban', group_id=event.group_id, user_id=event.user_id, duration=0)
-        await bot.call_api("send_group_msg",
-                           group_id=event.group_id,
-                           message=F"根据群员保护计划 为{MessageSegment.at(user_id=event.user_id)}解除禁言")
+        await listen_group_mute.finish(Message(F"根据群员保护计划 为{MessageSegment.at(user_id=event.user_id)}解除禁言"))
 
 
 # 添加保护计划
-add_defend_member = on_command('add_defend', rule=is_at(), permission=SUPERUSER)
+add_defend_member = on_command('add_defend', permission=SUPERUSER)
 
 
 @add_defend_member.handle()
-async def _(bot: Bot, event: GroupMessageEvent, state: T_State):
+async def add_defend_member_handle(bot: Bot, event: GroupMessageEvent, state: T_State):
     # 获取群名片
     card_info = await bot.call_api('get_group_member_info',
                                    group_id=event.group_id,
                                    user_id=event.message[0].data['qq'])
+    card = card_info['nickname'] if card_info['card'] == '' else card_info['card']
     if card_info['role'] != 'member':
-        await add_defend_member.reject(F"{card_info['nickname']}不能加入保护计划")
+        await add_defend_member.finish(F"{card}不能加入保护计划")
         return
     # 构建配置对象
-    pd = Plugin_Data(PLUGIN_NAME)
-    d = defend_member(event.message[0].data['qq'], event.group_id)
-    if not pd.query(d):
-        pd.add(d)
-        await add_defend_member.reject(F"{card_info['nickname']}已加入保护计划中")
-    else:
-        await add_defend_member.reject(F"{card_info['nickname']}已经在保护计划中")
-
+    result = await db_query(F"""SELECT sender_id, sender_name FROM bot.mute_defend 
+                       WHERE group_id={event.group_id} AND sender_id={event.user_id}""")
+    if len(result):
+        await add_defend_member.finish(F"{card}已经在保护计划中")
+        return
+    add_defend_sql = F"""
+        INSERT INTO bot.mute_defend 
+        (group_id, group_name, sender_id,sender_name,operator_id,operator_name)
+        VALUES
+	    ({event.group_id},'',{event.message[0].data['qq']},'{card}',{event.user_id},'{event.sender.card}');
+    """
+    print(add_defend_sql)
+    await db_query(add_defend_sql)
+    await add_defend_member.finish(F"{card}已加入保护计划")
 
 # 移除保护计划
-delete_defend_member = on_command('delete_defend', rule=is_at(), permission=SUPERUSER)
+delete_defend_member = on_command('delete_defend', permission=SUPERUSER)
 
 
 @delete_defend_member.handle()
-async def _(bot: Bot, event: GroupMessageEvent, state: T_State):
+async def delete_defend_member_handle(bot: Bot, event: GroupMessageEvent, state: T_State):
     # 获取群名片
     card_info = await bot.call_api('get_group_member_info',
                                    group_id=event.group_id,
                                    user_id=event.message[0].data['qq'])
 
+    card = card_info['nickname'] if card_info['card'] == '' else card_info['card']
     pd = Plugin_Data(PLUGIN_NAME)
-    d = defend_member(event.message[0].data['qq'], event.group_id)
+    d = defend_member(event.message[0].data['qq'], event.group_id, card)
     if pd.query(d):
         pd.delete(d)
-        await delete_defend_member.reject(F"{card_info['nickname']}已从保护计划中移除")
+        await delete_defend_member.finish(F"{card}已从保护计划中移除")
     else:
-        await delete_defend_member.reject(F"{card_info['nickname']}尚未在保护计划中")
+        await delete_defend_member.finish(F"{card}尚未在保护计划中")
 
+
+# 保护计划列表
+defend_member_list = on_command('defend_list')
+
+
+@defend_member_list.handle()
+async def defend_member_list_handle(bot: Bot, event: GroupMessageEvent, state: T_State):
+    # print(nonebot.get_bots().values())
+    # pd = Plugin_Data(PLUGIN_NAME)
+    # defend_list = pd.db.table('defend_member').search(Query().group_id == str(event.group_id))
+    #
+    # message = F"""
+    # 本群当前的保护名单:
+    # """
+    # index = 1
+    # for item in defend_list:
+    #     message += F"{index}. {item['card']}({item['qq']})\n"
+    #     index += 1
+    # if len(defend_list) == 0:
+    #     message += "空"
+    # await defend_member_list.finish(inspect.cleandoc(message))
+    await db_query(sql="SELECT * FROM bot.bot_subscribes")
