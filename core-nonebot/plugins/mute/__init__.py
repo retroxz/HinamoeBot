@@ -20,7 +20,6 @@ PLUGIN_NAME = __package__
 async def _():
     info(F"{__package__}已加载")
 
-
 def is_at():
     """
     验证是否是艾特消息
@@ -39,7 +38,6 @@ def is_at():
 
     return Rule(_is_at)
 
-
 def is_group_mute_event():
     """
     验证是否为群禁言时间
@@ -57,20 +55,16 @@ def is_group_mute_event():
 
     return Rule(_is_group_mute_event)
 
-
 # 禁言
 mute = on_command('mute', rule=is_at())
-
 
 @mute.handle()
 async def mute_handle(bot: Bot, event: GroupMessageEvent, state):
     await bot.call_api('set_group_ban', group_id=event.group_id, user_id=event.get_message()[0].data['qq'],
                        duration=600)
 
-
 # 解除禁言
 unmute = on_command('unmute', rule=is_at())
-
 
 @unmute.handle()
 async def unmute_handle(bot: Bot, event: GroupMessageEvent, state: T_State):
@@ -79,7 +73,6 @@ async def unmute_handle(bot: Bot, event: GroupMessageEvent, state: T_State):
 
 # 监听群组禁言
 listen_group_mute = on_notice(rule=is_group_mute_event())
-
 
 @listen_group_mute.handle()
 async def listen_group_mute_handle(bot: Bot, event: GroupBanNoticeEvent, state):
@@ -92,8 +85,7 @@ async def listen_group_mute_handle(bot: Bot, event: GroupBanNoticeEvent, state):
 
 
 # 添加保护计划
-add_defend_member = on_command('add_defend', permission=SUPERUSER)
-
+add_defend_member = on_command('add_defend', rule=is_at(), permission=SUPERUSER)
 
 @add_defend_member.handle()
 async def add_defend_member_handle(bot: Bot, event: GroupMessageEvent, state: T_State):
@@ -105,9 +97,9 @@ async def add_defend_member_handle(bot: Bot, event: GroupMessageEvent, state: T_
     if card_info['role'] != 'member':
         await add_defend_member.finish(F"{card}不能加入保护计划")
         return
-    # 构建配置对象
-    result = await db_query(F"""SELECT sender_id, sender_name FROM bot.mute_defend 
-                       WHERE group_id={event.group_id} AND sender_id={event.user_id}""")
+    query = F"""SELECT sender_id, sender_name FROM bot.mute_defend 
+                       WHERE group_id={event.group_id} AND sender_id={event.message[0].data['qq']}"""
+    result = await db_query(query)
     if len(result):
         await add_defend_member.finish(F"{card}已经在保护计划中")
         return
@@ -117,13 +109,12 @@ async def add_defend_member_handle(bot: Bot, event: GroupMessageEvent, state: T_
         VALUES
 	    ({event.group_id},'',{event.message[0].data['qq']},'{card}',{event.user_id},'{event.sender.card}');
     """
-    print(add_defend_sql)
     await db_query(add_defend_sql)
     await add_defend_member.finish(F"{card}已加入保护计划")
 
-# 移除保护计划
-delete_defend_member = on_command('delete_defend', permission=SUPERUSER)
 
+# 移除保护计划
+delete_defend_member = on_command('delete_defend', rule=is_at(), permission=SUPERUSER)
 
 @delete_defend_member.handle()
 async def delete_defend_member_handle(bot: Bot, event: GroupMessageEvent, state: T_State):
@@ -133,33 +124,31 @@ async def delete_defend_member_handle(bot: Bot, event: GroupMessageEvent, state:
                                    user_id=event.message[0].data['qq'])
 
     card = card_info['nickname'] if card_info['card'] == '' else card_info['card']
-    pd = Plugin_Data(PLUGIN_NAME)
-    d = defend_member(event.message[0].data['qq'], event.group_id, card)
-    if pd.query(d):
-        pd.delete(d)
-        await delete_defend_member.finish(F"{card}已从保护计划中移除")
+    if card_info['role'] != 'member':
+        await add_defend_member.finish(F"{card}没在保护计划中")
+        return
+    query = F"""SELECT sender_id, sender_name FROM bot.mute_defend 
+                         WHERE group_id={event.group_id} AND sender_id={event.message[0].data['qq']}"""
+    result = await db_query(query)
+    if not len(result):
+        await delete_defend_member.finish(F"{card}没在保护计划中")
     else:
-        await delete_defend_member.finish(F"{card}尚未在保护计划中")
+        delete_defend_sql = F"""
+            DELETE FROM bot.mute_defend WHERE group_id={event.group_id} AND sender_id={event.message[0].data['qq']}
+        """
+        await db_query(delete_defend_sql)
+        await delete_defend_member.finish(F"{card}已从保护计划中移除")
 
 
 # 保护计划列表
 defend_member_list = on_command('defend_list')
 
-
 @defend_member_list.handle()
 async def defend_member_list_handle(bot: Bot, event: GroupMessageEvent, state: T_State):
-    # print(nonebot.get_bots().values())
-    # pd = Plugin_Data(PLUGIN_NAME)
-    # defend_list = pd.db.table('defend_member').search(Query().group_id == str(event.group_id))
-    #
-    # message = F"""
-    # 本群当前的保护名单:
-    # """
-    # index = 1
-    # for item in defend_list:
-    #     message += F"{index}. {item['card']}({item['qq']})\n"
-    #     index += 1
-    # if len(defend_list) == 0:
-    #     message += "空"
-    # await defend_member_list.finish(inspect.cleandoc(message))
-    await db_query(sql="SELECT * FROM bot.bot_subscribes")
+    message = "本群当前的保护名单:\n"
+    query_sql = F"SELECT sender_id, sender_name FROM bot.mute_defend WHERE group_id={event.group_id}"
+    defend_list = await db_query(query_sql)
+    index = 1
+    for row in defend_list:
+        message += F"{index}. {row['sender_name']}({row['sender_id']})\n"
+    await defend_member_list.finish(inspect.cleandoc(message))
