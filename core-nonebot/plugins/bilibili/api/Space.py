@@ -4,17 +4,21 @@
 """
 Space Service Class
 """
+from typing import Optional
 
 from .BaseRequest import BaseRequest
-from ..exception import ParamsErrorException
 from utils import is_integer
 from ..exception import BiliUserNotFoundException
 
 
 class Space(BaseRequest):
     async def uid_info(self, uid):
+        """
+        获取bilibili用户资料卡
+        :param uid: 用户uid或者昵称
+        :return: 用户资料卡json
+        """
         if not is_integer(uid):
-            # 搜索用户昵称
             url = F"http://api.bilibili.com/x/web-interface/search/type?keyword={uid}&search_type=bili_user"
             response = await self.request('GET', url)
             if response['data']['numResults'] == 0:

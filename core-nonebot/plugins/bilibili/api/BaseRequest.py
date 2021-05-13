@@ -6,6 +6,7 @@ import httpx
 from httpx import ConnectTimeout, ReadTimeout
 from utils import logger
 from ..info import Error
+from ..exception import *
 
 
 class BaseRequest:
@@ -22,14 +23,16 @@ class BaseRequest:
             try:
                 response = await client.request(method, url, **kw)
                 response_json = response.json()
+                if response_json['code'] != 0:
+                    raise BiliRequestError(url, response_json['message'])
             except ConnectTimeout:
                 logger.error(F"{Error.BILI_REQUEST_TIME_OUT}")
                 raise
             except ReadTimeout:
                 logger.error(F"{Error.BILI_READ_TIME_OUT}")
                 raise
-            except:
-                logger.error(F"{Error.BILI_UNKNOWN_ERROR}")
-            print(response.text)
+            except PluginsBaseException as e:
+                logger.error(e.__str__())
+                raise
             return response_json
 
