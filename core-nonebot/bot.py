@@ -15,6 +15,7 @@ driver.register_adapter("cqhttp", CQHTTPBot)
 # 加载插件
 nonebot.load_plugin("plugins.bilibili")
 nonebot.load_plugin("plugins.mute")
+nonebot.load_plugin("plugins.weibo")
 
 if __name__ == "__main__":
     # 初始化配置文件夹
