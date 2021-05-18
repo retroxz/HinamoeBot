@@ -11,8 +11,9 @@ class Pushed(BasePluginConfig):
 
 # 推送群
 class PushGroup(BasePluginConfig):
-    def __init__(self, id=None, pushed_log=None):
+    def __init__(self, id=None, pushed_log=None, type=''):
         if pushed_log is None:
             pushed_log = []
         self.pushed_log = pushed_log
         self.id = id
+        self.type = type

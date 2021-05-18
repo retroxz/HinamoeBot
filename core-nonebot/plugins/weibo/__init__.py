@@ -2,7 +2,7 @@
 # -*-coding:utf-8 -*-
 import nonebot
 from nonebot import on_command
-from nonebot.adapters.cqhttp import GroupMessageEvent, MessageSegment, Message
+from nonebot.adapters.cqhttp import GroupMessageEvent, MessageSegment, Message, PrivateMessageEvent
 from nonebot.permission import SUPERUSER
 from nonebot.plugin import require
 from nonebot.adapters import Bot
@@ -65,14 +65,14 @@ scheduler = require('nonebot_plugin_apscheduler').scheduler
 
 scheduler.add_job(push_wb, "interval", seconds=20, id="xxx")
 
-wb_push_on = on_command('开启微博推送', permission=SUPERUSER)
+wb_push_on = on_command('开启本群微博推送', permission=SUPERUSER)
 
 
 @wb_push_on.handle()
 async def _(bot: Bot, event: GroupMessageEvent, state: T_State):
-    group_result = pd.query(PushGroup(event.group_id))
+    group_result = pd.query(PushGroup(event.group_id, type='group'))
     if not group_result:
-        pd.add(PushGroup(event.group_id))
+        pd.add(PushGroup(event.group_id, type='group'))
         await wb_push_on.send(F'已开启本群微博推送')
         # 推送最新的一条
         sql = F"SELECT * FROM weibo.weibo ORDER BY publish_time DESC LIMIT 1"
@@ -82,12 +82,29 @@ async def _(bot: Bot, event: GroupMessageEvent, state: T_State):
         await wb_push_on.send(F'已开启本群微博推送')
 
 
-wb_push_off = on_command('关闭微博推送', permission=SUPERUSER)
+wb_push_off = on_command('关闭本群微博推送', permission=SUPERUSER)
 
 
 @wb_push_off.handle()
 async def _(bot: Bot, event: GroupMessageEvent, state: T_State):
-    group_result = pd.query(PushGroup(event.group_id))
+    group_result = pd.query(PushGroup(event.group_id, type='group'))
     if group_result:
         pd.delete(PushGroup(event.group_id))
     await wb_push_off.finish(F'已关闭本群微博推送')
+
+
+private_wb_push_on = on_command('开启微博推送')
+
+
+@private_wb_push_on.handle()
+async def _(bot: Bot, event: PrivateMessageEvent, state: T_State):
+    group_result = pd.query(PushGroup(event.group_id, type='private'))
+    if not group_result:
+        pd.add(PushGroup(event.group_id, type='private'))
+        await wb_push_on.send(F'已为你开启微博推送')
+        # 推送最新的一条
+        sql = F"SELECT * FROM weibo.weibo ORDER BY publish_time DESC LIMIT 1"
+        res = await db_query(sql)
+        await send_wb_message([{"id": event.group_id}], res)
+    else:
+        await wb_push_on.send(F'已开启本群微博推送')
