@@ -1,11 +1,11 @@
 from datetime import datetime
 from hashlib import md5
 
-from nonebot import on_startswith
+from nonebot import on_command
 from nonebot.adapters import Bot, Event
 from nonebot.typing import T_State
 
-ex = ['大吉', '吉', '半吉', '小吉', '末吉', '凶', '大凶', '小凶', '吉', '末小凶']  # 求签结果选项
+ex = ['大吉', '吉', '半吉', '小吉', '末吉', '大凶', '凶', '半凶', '小吉', '末凶']  # 求签结果选项
 week = ['一', '二', '三', '四', '五', '六', '日']  # 将日期转换为汉字
 
 
@@ -36,7 +36,7 @@ def _fortune(word):
 
 
 # 注册求签事件响应器
-fortune = on_startswith("求签", priority=5)  # 优先级为5
+fortune = on_command("/求签", priority=5)  # 优先级为5
 
 
 @fortune.handle()
@@ -47,7 +47,7 @@ async def handle_first_receive(bot: Bot, event: Event, state: T_State):
         state["fortune_word"] = text
 
 
-@fortune.got("fortune_word", prompt="空的你是要求什么嘛！")  # 求签内容为空时反馈
+@fortune.got("fortune_word", prompt="告诉我求签的内容啊！")  # 求签内容为空时反馈
 async def handle_fortune_word(bot: Bot, event: Event, state: T_State):
     text = state["fortune_word"]
     msg = "{}\n{}所求内容【{}】\n{}".format(Date(), event.sender.card, text, _fortune(text))

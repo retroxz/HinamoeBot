@@ -18,7 +18,7 @@ class Space(BaseRequest):
         :param uid: 用户uid或者昵称
         :return: 用户资料卡json
         """
-        if not is_integer(uid):
+        if not uid.isdigit():
             url = F"http://api.bilibili.com/x/web-interface/search/type?keyword={uid}&search_type=bili_user"
             response = await self.request('GET', url)
             if response['data']['numResults'] == 0:
