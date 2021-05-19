@@ -16,9 +16,6 @@ driver = nonebot.get_driver()
 PLUGIN_NAME = __package__
 
 
-@driver.on_startup
-async def _():
-    info(F"{__package__}已加载")
 
 def is_at():
     """

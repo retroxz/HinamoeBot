@@ -2,7 +2,9 @@
 # -*- coding: utf-8 -*-
 import os
 from utils.plugin_data import PLUGINS_DATA_DIR
+from utils import logger
 import nonebot
+from nonebot.plugin import plugins
 from nonebot.adapters.cqhttp import Bot as CQHTTPBot
 
 
@@ -17,6 +19,8 @@ nonebot.load_plugin("plugins.mute")
 nonebot.load_plugin("plugins.weibo")
 nonebot.load_plugin("plugins.fortune")
 nonebot.load_plugin("plugins.danmaku")
+nonebot.load_plugin("plugins.auto_agree")
+
 
 if __name__ == "__main__":
     # 初始化配置文件夹
