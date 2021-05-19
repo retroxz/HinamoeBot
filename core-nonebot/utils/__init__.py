@@ -41,3 +41,11 @@ async def get_card_name(group_id, user_id):
     card_info = await bot.call_api('get_group_member_info', group_id, user_id)
     card = card_info['nickname'] if card_info['card'] == '' else card_info['card']
     return card
+
+def is_admin(bot, event):
+    if str(event.user_id) in bot.config.superusers:
+        return True
+    if event.message_type == 'private':
+        return True
+    if event.message_type == 'group' and event.sender.role == 'member':
+        return False
