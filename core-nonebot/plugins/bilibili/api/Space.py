@@ -7,24 +7,33 @@ Space Service Class
 from typing import Optional
 
 from .BaseRequest import BaseRequest
-from utils import is_integer
-from ..exception import BiliUserNotFoundException
 
 
 class Space(BaseRequest):
-    async def uid_info(self, uid):
+    async def get_user_info(self, uid):
         """
-        获取bilibili用户资料卡
-        :param uid: 用户uid或者昵称
-        :return: 用户资料卡json
+        获取用户信息(带直播间号)
+        :param uid: 用户id
+        :return:
         """
-        if not uid.isdigit():
-            url = F"http://api.bilibili.com/x/web-interface/search/type?keyword={uid}&search_type=bili_user"
-            response = await self.request('GET', url)
-            if response['data']['numResults'] == 0:
-                raise BiliUserNotFoundException(uid)
-            uid = response.get('data').get('result')[0]['mid']
-        response = await self.request('GET', F"http://api.bilibili.com/x/space/acc/info?mid={uid}")
-        if not response.get('data'):
-            raise BiliUserNotFoundException(uid)
-        return response.get('data')
+        url = 'http://api.bilibili.com/x/space/acc/info'
+        params = { 'mid': uid }
+        return await self.request('GET', url, params=params)
+
+    async def get_user_card_info(self, uid):
+        """
+        获取用户卡片信息(带粉丝数)
+        :param uid: 用户id
+        :return:
+        """
+        url = 'http://api.bilibili.com/x/web-interface/card'
+        params = { 'mid': uid }
+        return await self.request('GET', url, params=params)
+
+    async def search_user(self, keyword):
+        url = 'http://api.bilibili.com/x/web-interface/search/type'
+        params = {
+            'keyword': keyword,
+            'search_type': 'bili_user'
+        }
+        return await self.request('GET', url, params=params)

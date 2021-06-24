@@ -34,5 +34,5 @@ class BaseRequest:
             except PluginsBaseException as e:
                 logger.error(e.__str__())
                 raise
-            return response_json
+            return response_json['data']
 

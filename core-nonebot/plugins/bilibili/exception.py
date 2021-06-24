@@ -4,6 +4,8 @@ from utils import is_integer
 
 class PluginsBaseException(Exception):
     pass
+
+
 class ParamsErrorException(PluginsBaseException):
     def __init__(self, param_name: str):
         self.param_name = param_name
