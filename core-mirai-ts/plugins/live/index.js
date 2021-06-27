@@ -11,7 +11,7 @@ function listenLiveStatus(config){
     config.forEach(async function (data){
         let res = await LiveApi.getLiveRoomInfoasync(data.live)
         const currentLiveTime = res.data.room_info.live_start_time
-       if(res.data.room_info.live_status !== 0){
+       if(res.data.room_info.live_status === 1){
            if(currentLiveTime === lastLiveTimeMap[data.live]){
                console.log('已经推送过了')
            }else{
