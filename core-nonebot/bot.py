@@ -15,11 +15,11 @@ driver = nonebot.get_driver()
 driver.register_adapter("cqhttp", CQHTTPBot)
 
 # 加载插件
-# nonebot.load_plugin("plugins.mute")
-# nonebot.load_plugin("plugins.weibo")
+nonebot.load_plugin("plugins.mute")
+nonebot.load_plugin("plugins.weibo")
 # nonebot.load_plugin("plugins.fortune")
 # nonebot.load_plugin("plugins.danmaku")
-# nonebot.load_plugin("plugins.auto_agree")
+nonebot.load_plugin("plugins.auto_agree")
 nonebot.load_plugin("plugins.huo_zang_chang")
 
 
