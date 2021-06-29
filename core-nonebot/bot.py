@@ -21,6 +21,7 @@ nonebot.load_plugin("plugins.weibo")
 # nonebot.load_plugin("plugins.danmaku")
 nonebot.load_plugin("plugins.auto_agree")
 nonebot.load_plugin("plugins.huo_zang_chang")
+nonebot.load_plugin("plugins.apis")
 
 
 if __name__ == "__main__":

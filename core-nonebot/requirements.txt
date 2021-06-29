@@ -8,3 +8,5 @@ httpx~=0.17.1
 python-dateutil~=2.8.1
 PyMySQL==0.9.3
 aiomysql==0.0.21
+fastapi~=0.63.0
+pydantic~=1.8.2

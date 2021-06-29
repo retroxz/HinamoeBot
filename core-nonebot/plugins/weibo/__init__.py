@@ -2,7 +2,7 @@
 # -*-coding:utf-8 -*-
 import nonebot
 from nonebot import on_command
-from nonebot.adapters.cqhttp import  MessageSegment, Message, MessageEvent
+from nonebot.adapters.cqhttp import MessageSegment, Message, MessageEvent
 from nonebot.plugin import require
 from nonebot.adapters import Bot
 from nonebot.typing import T_State
