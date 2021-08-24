@@ -4,16 +4,17 @@
 from nonebot import on_message
 from nonebot.adapters import Bot, Event
 from nonebot.typing import T_State
-from .lyric import hzc
+from .lyric import words
 
 
 lyric = on_message()
 
 @lyric.handle()
 async def _(bot: Bot, event: Event, state: T_State):
-    try:
-        index = hzc.index(event.raw_message)
-        if index < len(hzc)- 1:
-            await lyric.finish(hzc[index + 1])
-    except ValueError:
-        pass
+    for word in words:
+        try:
+            index = word.index(event.raw_message)
+            if index < len(word)- 1:
+                await lyric.finish(word[index + 1])
+        except ValueError:
+            pass
