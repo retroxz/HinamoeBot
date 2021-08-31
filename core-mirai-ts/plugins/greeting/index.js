@@ -55,8 +55,8 @@ async function goodMorning(message) {
         return
     }
     console.log(`${message.sender.memberName}`)
-    console.log(currentRank)
-    message.reply([Message.At(message.sender.id),Message.Plain(`现在是: ${currentDate.getFullYear()}年${currentDate.getMonth() + 1}月${currentDate.getDate()}日 星期${weekZh[currentDate.getDay()]}\n 你是群里第【${currentRank}】位起床的哦${greetingStation} ${morningTip}`)])
+    console.log(parseInt(currentRank))
+    message.reply([Message.At(message.sender.id),Message.Plain(`现在是: ${currentDate.getFullYear()}年${currentDate.getMonth() + 1}月${currentDate.getDate()}日 星期${weekZh[currentDate.getDay()]}\n 你是群里第【${parseInt(currentRank)}】位起床的哦${greetingStation} ${morningTip}`)])
 }
 
 /**
@@ -94,7 +94,7 @@ async function goodNight(message) {
     }
     console.log(`${message.sender.memberName}`)
     console.log(currentRank)
-    message.reply([Message.At(message.sender.id),Message.Plain(`现在是: ${currentDate.getFullYear()}年${currentDate.getMonth() + 1}月${currentDate.getDate()}日 星期${weekZh[currentDate.getDay()]}\n 你是群里第【${currentRank}】位睡觉的哦 ${eveningTip}`)])
+    message.reply([Message.At(message.sender.id),Message.Plain(`现在是: ${currentDate.getFullYear()}年${currentDate.getMonth() + 1}月${currentDate.getDate()}日 星期${weekZh[currentDate.getDay()]}\n 你是群里第【${parseInt(currentRank)}】位睡觉的哦 ${eveningTip}`)])
 }
 
 function getGreetingStation(currentDate, lastLog) {

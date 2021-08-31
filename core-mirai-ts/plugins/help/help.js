@@ -61,10 +61,6 @@ exports.buttonHelp = function (message) {
     ])
 }
 
-exports.thankYou = function (message) {
-    let text = `======== 鸣谢 ========\n项目经理：疯狂的小智retro\n系统分析员：疯狂的小智retro\n结构工程师：疯狂的小智retro\n软件工程师：疯狂的小智retro\n硬件工程师：疯狂的小智retro\n软件测试工程师：疯狂的小智retro\n质量工程师：疯狂的小智retro\n其他人员：疯狂的小智retro\n`
-    message.reply(text)
-}
 
 exports.sdMsgHelp = function (message) {
     let text = `沙雕语录功能
@@ -79,4 +75,3 @@ help.set("好好说话帮助", exports.hhshHelp)
 help.set("求签帮助", exports.fortuneHelp)
 help.set("按钮帮助", exports.buttonHelp)
 help.set("沙雕语录帮助", exports.sdMsgHelp)
-// help.set("谢谢雏萌", exports.thankYou)
