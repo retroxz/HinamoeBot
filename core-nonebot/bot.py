@@ -14,7 +14,5 @@ print_copy_right()
 init_data_dir()
 load_plugins()
 
-
-
 if __name__ == "__main__":
     nonebot.run(app="__mp_main__:app")
