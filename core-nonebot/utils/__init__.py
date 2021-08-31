@@ -11,6 +11,7 @@
 from .logger import debug, info, warning, error, critical
 from .plugin_data import Plugin_Data
 import nonebot
+from .utils import init_data_dir, load_plugins, print_copy_right
 
 
 def is_integer(s):
