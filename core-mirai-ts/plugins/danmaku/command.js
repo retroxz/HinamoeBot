@@ -57,6 +57,7 @@ exports.danmakuRandom = async function (message) {
         for (let i = 0, len = res.length; i < len; i++) {
             replyMsg += `${res[i]['timestamp']}:${res[i]['msg']}\n`
         }
+        replyMsg += `查询指定时间弹幕: 查询弹幕`
         message.reply(replyMsg)
     } catch (e) {
         message.reply(e.message)

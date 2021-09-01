@@ -2,6 +2,8 @@
 # coding=utf-8
 from datetime import datetime
 from utils.db import db_query
+from utils.config import Config
+PAGE_SIZE = Config.danmaku['page_size']
 
 
 async def queryDanmakuRankByDate(room_id, current_date=datetime.now()):
@@ -14,8 +16,9 @@ async def queryDanmakuRankByDate(room_id, current_date=datetime.now()):
     return await db_query(sql)
 
 
-async def query_danmaku_list(room_id, query_date, uid):
+async def query_danmaku_list(room_id, query_date, uid, page=1):
+    page_offset = 0 if page == 1 else (int(page) - 1) * PAGE_SIZE - 1
     sql = "SELECT DISTINCT msg FROM bili.bili_danmaku WHERE timestamp > UNIX_TIMESTAMP(%s)*1000 " \
-          "AND room_id = %s AND uid = %s ORDER BY timestamp LIMIT 20 "
+          "AND room_id = %s AND uid = %s ORDER BY timestamp LIMIT %s,%s"
 
-    return await db_query(sql, (query_date, room_id, uid))
+    return await db_query(sql, (query_date, room_id, uid, page_offset, PAGE_SIZE))
