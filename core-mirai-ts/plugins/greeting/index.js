@@ -43,7 +43,7 @@ async function goodMorning(message) {
     let currentDateStr = `${currentDate.getFullYear()}-${currentDate.getMonth() + 1}-${currentDate.getDate()} ${currentDate.getHours()}:${currentDate.getMinutes()}:${currentDate.getSeconds()}`
     let currentRank = await GreetingModel.addGreetingLog({
         groupId: message.sender.group.id,
-        groupName: message.sender.group.name,
+        groupName: message.sender.group.name.replace(/\uD83C[\uDF00-\uDFFF]|\uD83D[\uDC00-\uDE4F]/g, ""),
         senderId: message.sender.id,
         senderName: message.sender.memberName,
         type: 1,
@@ -81,7 +81,7 @@ async function goodNight(message) {
     let currentDateStr = `${currentDate.getFullYear()}-${currentDate.getMonth() + 1}-${currentDate.getDate()} ${currentDate.getHours()}:${currentDate.getMinutes()}:${currentDate.getSeconds()}`
     let currentRank = await GreetingModel.addGreetingLog({
         groupId: message.sender.group.id,
-        groupName: message.sender.group.name,
+        groupName: message.sender.group.name.replace(/\uD83C[\uDF00-\uDFFF]|\uD83D[\uDC00-\uDE4F]/g, ""),
         senderId: message.sender.id,
         senderName: message.sender.memberName,
         type: 2,
