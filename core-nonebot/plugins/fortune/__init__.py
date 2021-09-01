@@ -36,7 +36,7 @@ def _fortune(word):
 
 
 # 注册求签事件响应器
-fortune = on_command("求签", priority=5)  # 优先级为5
+fortune = on_command("求签")  # 优先级为5
 
 
 @fortune.handle()
