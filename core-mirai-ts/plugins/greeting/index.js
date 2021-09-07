@@ -41,7 +41,8 @@ async function goodMorning(message) {
     //获取早安提示
     let morningTip = await getMorningTip(currentDate.getHours())
     let currentDateStr = `${currentDate.getFullYear()}-${currentDate.getMonth() + 1}-${currentDate.getDate()} ${currentDate.getHours()}:${currentDate.getMinutes()}:${currentDate.getSeconds()}`
-    let currentRank = await GreetingModel.addGreetingLog({
+    let currentRank = 0
+    let params = {
         groupId: message.sender.group.id,
         groupName: message.sender.group.name.replace(/\uD83C[\uDF00-\uDFFF]|\uD83D[\uDC00-\uDE4F]/g, ""),
         senderId: message.sender.id,
@@ -49,7 +50,15 @@ async function goodMorning(message) {
         type: 1,
         morning_time: currentDateStr,
         create_time: currentDateStr
-    })
+    }
+    try {
+        currentRank = await GreetingModel.addGreetingLog(params)
+    }catch (e){
+        // 写入失败 放弃保存名称
+        params.groupName = 'QQ群'
+        params.senderName = 'QQ群昵称'
+        currentRank = await GreetingModel.addGreetingLog(params)
+    }
     if(currentRank == -1){
         message.reply([Message.At(message.sender.id),Message.Plain(`你已经早安过了`)])
         return
@@ -79,7 +88,8 @@ async function goodNight(message) {
     //获取晚安提示
     let eveningTip = await getEveningTip(currentDate.getHours())
     let currentDateStr = `${currentDate.getFullYear()}-${currentDate.getMonth() + 1}-${currentDate.getDate()} ${currentDate.getHours()}:${currentDate.getMinutes()}:${currentDate.getSeconds()}`
-    let currentRank = await GreetingModel.addGreetingLog({
+    let currentRank = 0
+    let params = {
         groupId: message.sender.group.id,
         groupName: message.sender.group.name.replace(/\uD83C[\uDF00-\uDFFF]|\uD83D[\uDC00-\uDE4F]/g, ""),
         senderId: message.sender.id,
@@ -87,7 +97,15 @@ async function goodNight(message) {
         type: 2,
         morning_time: currentDateStr,
         create_time: currentDateStr
-    })
+    }
+    try {
+        currentRank = await GreetingModel.addGreetingLog(params)
+    }catch (e){
+        // 写入失败 放弃保存名称
+        params.groupName = 'QQ群'
+        params.senderName = 'QQ群昵称'
+        currentRank = await GreetingModel.addGreetingLog(params)
+    }
     if(currentRank == -1){
         message.reply([Message.At(message.sender.id),Message.Plain(`你已经晚安过了`)])
         return
