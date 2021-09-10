@@ -25,7 +25,7 @@ LOG_COLORS_CONFIG = {
 }
 
 # 日志格式化设置
-LOG_FORMATTER = '[bold {}]{} ({}) {}[/bold {}]'
+LOG_FORMATTER = '[{}]{} [{}] {}[{}]'
 
 # 日志目录
 LOG_DIR = './log'
@@ -54,7 +54,7 @@ def console(level, message):
         message,
         LOG_COLORS_CONFIG[level.upper()]
     )
-    write_log_file(msg)
+    # write_log_file(msg)
     print(msg)
 
 
@@ -117,4 +117,5 @@ def write_log_file(message):
     if not os.path.exists(F"{LOG_DIR}/{datetime.now().strftime('%Y%m')}"):
         os.makedirs(F"{LOG_DIR}/{datetime.now().strftime('%Y%m')}")
     with open(F"{LOG_DIR}/{datetime.now().strftime('%Y%m')}/{datetime.now().strftime('%d')}.log", 'a', encoding='utf-8') as log_file:
+        message.replace('\n', '')
         log_file.write(F"{message}\n")
