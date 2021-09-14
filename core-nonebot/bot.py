@@ -10,6 +10,7 @@ app = nonebot.get_asgi()
 driver = nonebot.get_driver()
 driver.register_adapter("cqhttp", CQHTTPBot)
 
+# 加载插件和配置
 print_copy_right()
 init_data_dir()
 load_plugins()

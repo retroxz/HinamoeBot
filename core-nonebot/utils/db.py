@@ -3,7 +3,7 @@
 
 import nonebot
 import aiomysql
-from .logger import info
+from .logger import logger
 
 global_config = nonebot.get_driver().config
 
@@ -26,7 +26,7 @@ async def db_query(sql: str, params=None):
     await cur.execute(sql, tuple(params))
     r = await cur.fetchall()
     # 将执行过的SQL写入到日志中
-    info(cur._last_executed)
+    logger.info(F"执行SQL: {cur._last_executed}")
     await cur.close()
     conn.close()
     return r

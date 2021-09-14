@@ -8,7 +8,7 @@
 @Date: 2021/04/23
 """
 
-from .logger import debug, info, warning, error, critical
+from .logger import logger
 from .plugin_data import Plugin_Data
 import nonebot
 from .utils import init_data_dir, load_plugins, print_copy_right

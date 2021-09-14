@@ -145,3 +145,4 @@ dmypy.json
 .env
 data
 config.yml
+log

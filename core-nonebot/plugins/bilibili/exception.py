@@ -2,8 +2,11 @@
 # coding=utf-8
 from utils import is_integer
 
+
 class PluginsBaseException(Exception):
     pass
+
+
 class ParamsErrorException(PluginsBaseException):
     def __init__(self, param_name: str):
         self.param_name = param_name
@@ -24,6 +27,7 @@ class BiliRequestError(PluginsBaseException):
     def __init__(self, url, msg):
         self.url = url
         self.msg = msg
+
     def __str__(self):
         error_msg = F"Bili API Request Error({self.url}): {self.msg}"
         return error_msg
