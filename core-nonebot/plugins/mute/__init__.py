@@ -7,7 +7,7 @@ from nonebot.rule import Rule, to_me
 from nonebot.adapters import Bot, Event
 from nonebot.typing import T_State
 from nonebot.adapters.cqhttp.message import MessageSegment, Message
-from utils import Plugin_Data, info
+from utils import Plugin_Data
 from utils.db import db_query
 from .config import defend_member
 import inspect
