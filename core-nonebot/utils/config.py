@@ -7,7 +7,6 @@ import sys
 import yaml
 import os
 sys.path.append('../')
-# from bot import RUN_PATH
 
 path = os.path.abspath(os.path.join('./', 'config.yml'))
 config = yaml.load(open(path, 'r', encoding='utf-8').read(), Loader=yaml.FullLoader)

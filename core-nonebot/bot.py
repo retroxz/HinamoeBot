@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 import os
-from utils import load_plugins, init_data_dir, print_copy_right
+from utils.utils import load_plugins, init_data_dir, print_copy_right
 import nonebot
 from nonebot.adapters.cqhttp import Bot as CQHTTPBot
 

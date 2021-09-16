@@ -4,10 +4,11 @@ __author__ = 'retroxz'
 
 import os
 import nonebot
-from .plugin_data import PLUGINS_DATA_DIR
-from .config import Config
+from utils.plugin_data import PLUGINS_DATA_DIR
+from utils.config import Config
 from colorama import init as colorInit
-colorInit()
+
+BOT_PATH = os.path.abspath(os.path.join(os.path.expanduser('~'), '.hinamoe/bot'))
 
 
 def init_data_dir():
@@ -29,7 +30,8 @@ def load_plugins():
 
 
 def print_copy_right():
-    COPYRIGHT =  "\033[0;37;1m" + """
+    colorInit()
+    COPYRIGHT = F"\033[0;37;1m" + f"""
   _    _ _                                  ____        _   
  | |  | (_)                                |  _ \      | |  
  | |__| |_ _ __   __ _ _ __ ___   ___   ___| |_) | ___ | |_ 
@@ -38,6 +40,7 @@ def print_copy_right():
  |_|  |_|_|_| |_|\__,_|_| |_| |_|\___/ \___|____/ \___/ \__|   
  
 Copyright © 2019-2021 HinamoeOfficial,All Rights Reserved
-Project: https://github.com/retroxz/HinamoeBot                                                
+Project: https://github.com/retroxz/HinamoeBot
+BOT数据目录: {BOT_PATH}                                                
 """ + "\033[0m"
     print(COPYRIGHT)
