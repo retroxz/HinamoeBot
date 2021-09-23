@@ -9,7 +9,6 @@
 """
 
 from .plugin_data import Plugin_Data
-import nonebot
 
 
 def is_integer(s):
@@ -34,14 +33,25 @@ def is_integer(s):
     return False
 
 
-async def get_card_name(group_id, user_id):
-    bot = list(nonebot.get_bots().values())[0]
-    # 获取群名片
+async def get_card_name(bot, group_id, user_id):
+    """
+    获取用户群名片信息
+    :param group_id:
+    :param user_id:
+    :return:
+    """
     card_info = await bot.call_api('get_group_member_info', group_id, user_id)
     card = card_info['nickname'] if card_info['card'] == '' else card_info['card']
     return card
 
+
 def is_admin(bot, event):
+    """
+    检测该用户是否为管理
+    :param bot:
+    :param event:
+    :return:
+    """
     if str(event.user_id) in bot.config.superusers:
         return True
     if event.message_type == 'private':
