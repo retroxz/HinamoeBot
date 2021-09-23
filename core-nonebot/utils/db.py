@@ -26,7 +26,7 @@ async def db_query(sql: str, params=None):
     await cur.execute(sql, tuple(params))
     r = await cur.fetchall()
     # 将执行过的SQL写入到日志中
-    logger.info(F"执行SQL: {cur._last_executed}")
+    logger.success(F"执行SQL: {cur._last_executed}")
     await cur.close()
     conn.close()
     return r

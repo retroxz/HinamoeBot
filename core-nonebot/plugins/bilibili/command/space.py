@@ -21,7 +21,7 @@ async def _(bot: Bot, event: Event):
 
     uid = event.get_message().__str__()
     try:
-        uid = await search_user_uid(uid)
+        uid, room_id = await search_user_uid(uid)
         user_space_data = await get_user_space_info(uid)
         user_card_data = await get_user_card_info(uid)
         reply_msg = F"""{MessageSegment.image(user_space_data['face'])}

@@ -24,4 +24,5 @@ logger_format = (
 logger.remove()
 
 logger.add(sys.stdout, colorize=True, format=logger_format)
-logger.add(BOT_PATH + "/logs/{time: YYYY-MM}/{time: DD}.log", format=logger_format, rotation='00:00')
+logger.add(BOT_PATH + "/logs/{time: YYYY-MM}/{time: DD}.log", format=logger_format, rotation='00:00', level='SUCCESS',
+           encoding='utf-8')
