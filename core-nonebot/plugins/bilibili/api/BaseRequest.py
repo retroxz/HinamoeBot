@@ -23,7 +23,7 @@ async def request(method: str, url: str, **kw):
             response = await client.request(method, url, **kw)
             response_json = response.json()
             if response_json['code'] != 0:
-                raise BiliRequestError(url, response_json['message'])
+                raise BiliRequestError(url, response, response_json)
         except ConnectTimeout:
             logger.error(F"{Error.BILI_REQUEST_TIME_OUT}")
             raise

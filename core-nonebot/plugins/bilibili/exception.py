@@ -24,10 +24,11 @@ class BiliUserNotFoundException(PluginsBaseException):
 
 
 class BiliRequestError(PluginsBaseException):
-    def __init__(self, url, msg):
+    def __init__(self, url, body, response):
         self.url = url
-        self.msg = msg
+        self.body = body
+        self.response = response
 
     def __str__(self):
-        error_msg = F"Bili API Request Error({self.url}): {self.msg}"
+        error_msg = F"哔哩哔哩API请求错误({self.url}):\n 请求体: {self.body}\n 响应: {self.body}"
         return error_msg
