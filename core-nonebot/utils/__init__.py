@@ -101,3 +101,17 @@ def filter_emoji(desstr, restr=''):
     except re.error:
         co = re.compile(u'[\uD800-\uDBFF][\uDC00-\uDFFF]')
     return co.sub(restr, desstr)
+
+
+async def bot_is_admin(group_id, bot=None):
+    if bot is None:
+        bot = list(nonebot.get_bots().values())[0]
+
+    # 获取bot QQ
+    bot_qq = bot.self_id
+    # 查询bot成员信息
+    card_info = await bot.call_api('get_group_member_info', group_id=group_id, user_id=bot_qq)
+    if card_info['role'] in ['owner', 'admin']:
+        return True
+    else:
+        return False
