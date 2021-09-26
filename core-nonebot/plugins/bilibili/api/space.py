@@ -6,7 +6,7 @@ Space Service Class
 """
 from typing import Optional
 
-from .BaseRequest import request
+from .base_request import request
 from ..exception import BiliUserNotFoundException
 
 

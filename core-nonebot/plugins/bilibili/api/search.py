@@ -7,7 +7,7 @@
 @GitHub         : https://github.com/retroxz
 """
 
-from .BaseRequest import request
+from .base_request import request
 
 __author__ = "retroxz"
 
@@ -31,4 +31,4 @@ async def search_user_uid(uid):
     response = await request('GET', url)
     if response['data']['numResults'] == 0:
         raise BiliUserNotFoundException(uid)
-    return response.get('data').get('result')[0]['mid'], response.get('data').get('result')[0]['room_id']
+    return response.get('data').get('rsult')[0]['mid'], response.get('data').get('result')[0]['room_id']

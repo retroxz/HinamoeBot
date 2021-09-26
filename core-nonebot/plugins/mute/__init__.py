@@ -16,7 +16,6 @@ driver = nonebot.get_driver()
 PLUGIN_NAME = __package__
 
 
-
 def is_at():
     """
     验证是否是艾特消息
@@ -34,6 +33,7 @@ def is_at():
             pass
 
     return Rule(_is_at)
+
 
 def is_group_mute_event():
     """

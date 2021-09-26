@@ -10,7 +10,7 @@ import inspect
 from nonebot import on_command
 from nonebot.adapters.cqhttp import Bot, GroupMessageEvent, PrivateMessageEvent
 from utils import is_admin, bot_is_admin
-from plugins.bilibili.api.Search import search_user_uid
+from plugins.bilibili.api.search import search_user_uid
 from plugins.bilibili.exception import BiliUserNotFoundException
 from plugins.bilibili.model.subscribe import *
 

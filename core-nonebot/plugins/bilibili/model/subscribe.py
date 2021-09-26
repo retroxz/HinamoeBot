@@ -11,7 +11,7 @@ __author__ = "retroxz"
 import emoji
 from utils.db import db_query
 from utils import get_event_id_and_type, get_group_info, filter_emoji
-from plugins.bilibili.api.Space import get_user_space_info
+from plugins.bilibili.api.space import get_user_space_info
 
 
 async def create_subscribe(event, uid, room_id):

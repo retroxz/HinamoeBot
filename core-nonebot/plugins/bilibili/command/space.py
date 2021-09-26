@@ -7,8 +7,8 @@
 
 from nonebot import on_command
 from nonebot.adapters.cqhttp import Bot, Event, MessageSegment, Message
-from ..api.Space import get_user_space_info, get_user_card_info
-from ..api.Search import search_user_uid
+from ..api.space import get_user_space_info, get_user_card_info
+from ..api.search import search_user_uid
 from ..exception import BiliUserNotFoundException
 import inspect
 

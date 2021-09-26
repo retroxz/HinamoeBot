@@ -3,3 +3,4 @@
 
 from .space import *
 from plugins.bilibili.command.subscribe import *
+from plugins.bilibili.command.auth import *
