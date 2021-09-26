@@ -1,11 +1,13 @@
 # !/usr/bin/env python3
 # coding=utf-8
 from utils import is_integer
+from utils.logger import logger
 
 
 class PluginsBaseException(Exception):
     def message(self):
         return self.__str__()
+
 
 class ParamsErrorException(PluginsBaseException):
     def __init__(self, param_name: str):

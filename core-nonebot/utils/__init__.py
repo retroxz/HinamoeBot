@@ -11,6 +11,7 @@
 import re
 import nonebot
 from .plugin_data import Plugin_Data
+from nonebot.adapters.cqhttp import Bot, Event, Message
 
 
 def is_integer(s):
@@ -35,7 +36,7 @@ def is_integer(s):
     return False
 
 
-async def get_card_name(group_id, user_id, bot=None, ):
+async def get_card_name(group_id, user_id, bot=None):
     """
     获取用户群名片信息
     :param bot:
@@ -115,3 +116,21 @@ async def bot_is_admin(group_id, bot=None):
         return True
     else:
         return False
+
+
+async def send_message(message, qid, qtype, bot=None):
+    if bot is None:
+        bot = list(nonebot.get_bots().values())[0]
+    await bot.call_api(F'send_{qtype}_msg',
+                       **{
+                           'user_id' if qtype == 'private' else 'group_id': qid,
+                           'message': message
+                       })
+
+
+async def send_private_message(message, qid, bot=None):
+    await send_message(message, qid, 'private', bot)
+
+
+async def send_group_message(message, qid, bot=None):
+    await send_message(message, qid, 'group', bot)

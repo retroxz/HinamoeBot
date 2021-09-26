@@ -20,23 +20,26 @@ async def request(method: str, url: str, origin=False, **kw):
     """
 
     async with httpx.AsyncClient() as client:
-        try:
-            origin_response = await client.request(method, url, **kw)
-            response = origin_response.json()
-            if response['code'] != 0:
-                raise BiliRequestError(url, response, response)
-
-            # 风控检测
-            if response['code'] == -412:
-                raise BiliRefuseError(url, response, response)
-
-        except ConnectTimeout:
-            logger.error(F"{Error.BILI_REQUEST_TIME_OUT}")
-            raise
-        except ReadTimeout:
-            logger.error(F"{Error.BILI_READ_TIME_OUT}")
-            raise
-        except PluginsBaseException as e:
+        e = Exception()
+        origin_response = await client.request(method, url, **kw)
+        response = origin_response.json()
+        if response.get('code') != 0:
+            e = BiliRequestError(url, response, response)
             logger.error(e.__str__())
-            raise
+            raise e
+        # 风控检测
+        if response.get('code') == -412:
+            e = BiliRefuseError(url, response, response)
+            logger.error(e.__str__())
+            raise e
+
+        # except ConnectTimeout:
+        #     logger.error(F"{Error.BILI_REQUEST_TIME_OUT}")
+        #     raise
+        # except ReadTimeout:
+        #     logger.error(F"{Error.BILI_READ_TIME_OUT}")
+        #     raise
+        # except PluginsBaseException as e:
+        #     logger.error(e.__str__())
+        #     raise
         return origin_response if origin else response.get('data')

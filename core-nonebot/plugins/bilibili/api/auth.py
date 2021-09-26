@@ -7,8 +7,6 @@
 @GitHub         : https://github.com/retroxz
 """
 
-import asyncio
-import httpx
 from .base_request import request
 from plugins.bilibili.utils.cache_bot import cache
 
@@ -31,5 +29,4 @@ async def get_login_info():
     url = 'http://passport.bilibili.com/qrcode/getLoginInfo'
     oauth_key = cache.get('bili_oauth_key')
     params = {'oauthKey': oauth_key}
-    response = await request('POST', url, data=params, origin=True)
-    return response
+    return await request('POST', url, data=params, origin=True)
