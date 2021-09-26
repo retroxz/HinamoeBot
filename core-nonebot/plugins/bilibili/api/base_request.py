@@ -9,9 +9,10 @@ from ..info import Error
 from ..exception import *
 
 
-async def request(method: str, url: str, **kw):
+async def request(method: str, url: str, origin=False, **kw):
     """
     请求函数
+    :param origin: 返回原始response
     :param method: 请求方式
     :param url: 请求地址
     :param kw: 额外参数
@@ -20,14 +21,14 @@ async def request(method: str, url: str, **kw):
 
     async with httpx.AsyncClient() as client:
         try:
-            response = await client.request(method, url, **kw)
-            response_json = response.json()
-            if response_json['code'] != 0:
-                raise BiliRequestError(url, response, response_json)
+            origin_response = await client.request(method, url, **kw)
+            response = origin_response.json()
+            if response['code'] != 0:
+                raise BiliRequestError(url, response, response)
 
             # 风控检测
-            if response_json['code'] == -412:
-                raise BiliRefuseError(url, response, response_json)
+            if response['code'] == -412:
+                raise BiliRefuseError(url, response, response)
 
         except ConnectTimeout:
             logger.error(F"{Error.BILI_REQUEST_TIME_OUT}")
@@ -38,4 +39,4 @@ async def request(method: str, url: str, **kw):
         except PluginsBaseException as e:
             logger.error(e.__str__())
             raise
-        return response_json
+        return origin_response if origin else response.get('data')

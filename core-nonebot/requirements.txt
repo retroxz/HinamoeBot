@@ -13,3 +13,5 @@ pydantic~=1.8.2
 emoji
 qrcode
 Pillow==8.3.2
+cacheout==0.13.1
+

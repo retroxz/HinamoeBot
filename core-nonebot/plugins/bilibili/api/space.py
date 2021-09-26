@@ -18,14 +18,14 @@ async def get_user_space_info(uid):
     """
 
     response = await request('GET', F"http://api.bilibili.com/x/space/acc/info?mid={uid}")
-    if not response.get('data'):
+    if not response.get('mid'):
         raise BiliUserNotFoundException(uid)
-    return response.get('data')
+    return response
 
 
 async def get_user_card_info(uid):
     url = F"http://api.bilibili.com/x/web-interface/card?mid={uid}"
     response = await request('GET', url)
-    if not response.get('data'):
+    if not response.get('card'):
         raise BiliUserNotFoundException(uid)
-    return response.get('data')
+    return response
