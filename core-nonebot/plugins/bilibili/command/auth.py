@@ -39,7 +39,8 @@ async def _(bot: Bot, event: PrivateMessageEvent):
     # 设置登陆验证定时任务
     scheduler.add_job(verify_bili_login, 'interval', seconds=30, id='login')
     # 设置登陆验证超时
-    scheduler.add_job(bili_qr_time, run_date=datetime.datetime.now()+datetime.timedelta(seconds=180))
+    scheduler.add_job(bili_qr_time, run_date=datetime.datetime.now()+datetime.timedelta(seconds=180),
+                      id='verify_timeout')
 
 
 async def verify_bili_login():
@@ -55,7 +56,7 @@ async def verify_bili_login():
         cache.set('bili_cookie', cookies)
         # 持久化到数据库
         await auth_model.update_cache(cookies)
-
+        scheduler.remove_job('verify_timeout')
         await send_private_message('哔哩哔哩账号登录成功', qid=cache.get('auth_qq'))
 
 
