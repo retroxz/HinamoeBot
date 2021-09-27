@@ -15,6 +15,8 @@ import inspect
 
 uid_info = on_command('uid')
 
+test = on_command('test')
+
 
 @uid_info.handle()
 async def _(bot: Bot, event: Event):
@@ -37,3 +39,8 @@ async def _(bot: Bot, event: Event):
 
     except BiliUserNotFoundException as e:
         await uid_info.send(e.__str__())
+
+
+@test.handle()
+async def _(bot: Bot, event: Event):
+

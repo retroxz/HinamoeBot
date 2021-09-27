@@ -3,10 +3,9 @@
 
 
 import httpx
-from httpx import ConnectTimeout, ReadTimeout
 from utils import logger
-from ..info import Error
 from ..exception import *
+from plugins.bilibili.utils.cache_bot import cache
 
 
 async def request(method: str, url: str, origin=False, **kw):
@@ -21,7 +20,9 @@ async def request(method: str, url: str, origin=False, **kw):
 
     async with httpx.AsyncClient() as client:
         e = Exception()
-        origin_response = await client.request(method, url, **kw)
+        # 读取cookies
+        cookies = cache.get('bili_cookie')
+        origin_response = await client.request(method, url, cookies=cookies, **kw)
         response = origin_response.json()
         if response.get('code') != 0:
             e = BiliRequestError(url, response, response)
