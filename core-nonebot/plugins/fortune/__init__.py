@@ -41,14 +41,17 @@ fortune = on_command("求签")  # 优先级为5
 
 @fortune.handle()
 async def handle_first_receive(bot: Bot, event: Event, state: T_State):
-    text = (str(event.get_message()).replace(" ", "")).split("求签")[-1]  # 剔除空格和求签
+    origin_raw = str(event.get_message())
+    raw = F"{origin_raw}{event.sender.user_id}{datetime.now().strftime('%Y%m%d')}"
     # 如果结果不为空，就存入T_State
-    if text:
-        state["fortune_word"] = text
+    if origin_raw:
+        state["origin_raw"] = origin_raw
+        state["raw"] = raw
 
 
-@fortune.got("fortune_word", prompt="告诉我求签的内容啊！")  # 求签内容为空时反馈
+@fortune.got("origin_raw", prompt="告诉我求签的内容啊！")  # 求签内容为空时反馈
 async def handle_fortune_word(bot: Bot, event: Event, state: T_State):
-    text = state["fortune_word"]
-    msg = "{}\n{}所求内容【{}】\n{}".format(Date(), event.sender.card, text, _fortune(text))
+    origin_raw = state["origin_raw"]
+    raw = state["raw"]
+    msg = "{}\n{}所求内容【{}】\n{}".format(Date(), event.sender.card, origin_raw, _fortune(raw))
     await fortune.send(msg)

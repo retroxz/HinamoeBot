@@ -12,7 +12,6 @@ from ..api.search import search_user_uid
 from ..exception import BiliUserNotFoundException
 import inspect
 
-
 uid_info = on_command('uid')
 
 test = on_command('test')
@@ -20,7 +19,6 @@ test = on_command('test')
 
 @uid_info.handle()
 async def _(bot: Bot, event: Event):
-
     uid = event.get_message().__str__()
     try:
         uid, room_id = await search_user_uid(uid)
@@ -43,4 +41,4 @@ async def _(bot: Bot, event: Event):
 
 @test.handle()
 async def _(bot: Bot, event: Event):
-
+    pass
