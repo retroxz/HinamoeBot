@@ -11,7 +11,7 @@ __author__ = "retroxz"
 from nonebot import on_command
 from nonebot.adapters.cqhttp import Bot, PrivateMessageEvent
 from nonebot.permission import SUPERUSER
-from plugins.bilibili.api.auth import get_login_url,get_login_info
+from plugins.bilibili.api.auth import get_login_url, get_login_info
 from plugins.bilibili.utils.qr import *
 from nonebot.adapters.cqhttp.message import MessageSegment, Message
 from nonebot import require

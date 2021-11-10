@@ -29,6 +29,6 @@ async def search_user_uid(uid):
         return uid
     url = F"http://api.bilibili.com/x/web-interface/search/type?keyword={uid}&search_type=bili_user"
     response = await request('GET', url)
-    if response['data']['numResults'] == 0:
+    if response['numResults'] == 0:
         raise BiliUserNotFoundException(uid)
-    return response.get('rsult')[0]['mid'], response.get('data').get('result')[0]['room_id']
+    return response.get('result')[0]['mid'], response.get('result')[0]['room_id']

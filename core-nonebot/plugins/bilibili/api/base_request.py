@@ -20,9 +20,7 @@ async def request(method: str, url: str, origin=False, **kw):
 
     async with httpx.AsyncClient() as client:
         e = Exception()
-        # 读取cookies
-        cookies = cache.get('bili_cookie')
-        origin_response = await client.request(method, url, cookies=cookies, **kw)
+        origin_response = await client.request(method, url, **kw)
         response = origin_response.json()
         if response.get('code') != 0:
             e = BiliRequestError(url, response, response)
