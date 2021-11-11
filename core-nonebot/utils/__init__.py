@@ -12,6 +12,8 @@ import re
 import nonebot
 from .plugin_data import Plugin_Data
 from nonebot.adapters.cqhttp import Bot, Event, Message
+from nonebot.adapters.cqhttp.exception import ActionFailed
+from .logger import logger
 
 
 def is_integer(s):
@@ -121,11 +123,14 @@ async def bot_is_admin(group_id, bot=None):
 async def send_message(message, qid, qtype, bot=None):
     if bot is None:
         bot = list(nonebot.get_bots().values())[0]
-    await bot.call_api(F'send_{qtype}_msg',
-                       **{
-                           'user_id' if qtype == 'private' else 'group_id': qid,
-                           'message': message
-                       })
+    try:
+        await bot.call_api(F'send_{qtype}_msg',
+                           **{
+                               'user_id' if qtype == 'private' else 'group_id': qid,
+                               'message': message
+                           })
+    except ActionFailed:
+        logger.error(F"Bot({bot.self_id})向{'群组' if qtype == 'group' else '好友'}({qid})发送消息失败，请查看客户端日志\n消息原文:\n{message}")
 
 
 async def send_private_message(message, qid, bot=None):

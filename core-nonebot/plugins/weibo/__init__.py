@@ -11,6 +11,7 @@ from utils.db import db_query
 from utils import is_admin
 import inspect
 from .config import *
+from utils import send_message
 
 # Todo 以后再优化
 PLUGIN_NAME = 'weibo'
@@ -28,15 +29,17 @@ async def push_wb():
     if res:
         pd.db.table('Pushed').truncate()
         pd.add(Pushed(str(res[0]['publish_time'])))
-    # 获取要推送的群
-    push_group_list = pd.db.table('PushGroup').all()
-    await send_wb_message(push_group_list, res)
+        # 获取要推送的群
+        push_group_list = pd.db.table('PushGroup').all()
+        await send_wb_message(push_group_list, res)
 
 
 async def send_wb_message(push_group_list, wb_list):
     # 推送
     bot = list(nonebot.get_bots().values())[0]
     for item in wb_list:
+        # 去除原图两字
+        item['content'] = item['content'].replace('原图', '')
         push_wb_message = F"""
             发新微博啦！！
             发布时间: {item['publish_time']}
@@ -47,7 +50,6 @@ async def send_wb_message(push_group_list, wb_list):
             origin_pics = item['original_pictures'].split(',')
             for pic in origin_pics:
                 push_wb_message += F"{MessageSegment.image(file=pic)}"
-
         for group in push_group_list:
             # 检查推送记录
             if not group.get('pushed_log'):
@@ -57,7 +59,9 @@ async def send_wb_message(push_group_list, wb_list):
                     'message': Message(inspect.cleandoc(push_wb_message)),
                     'user_id' if group['type'] == 'private' else 'group_id': group['id']
                 }
-                await bot.call_api(F"send_{group['type']}_msg", **params)
+                # await bot.call_api(F"send_{group['type']}_msg", **params)
+                await send_message(Message(inspect.cleandoc(push_wb_message)), group['id'], group['type'])
+
                 # 记录推送日志
                 group['pushed_log'].append(item['id'])
                 pd.update(
