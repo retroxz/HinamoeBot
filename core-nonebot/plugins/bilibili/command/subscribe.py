@@ -124,7 +124,7 @@ def generate_subscribe_list(subscribe_list):
     message_raw = ''
     index = 1
     for subscribe in subscribe_list:
-        message_raw += F"\t{index}. {subscribe['bili_nick_name']}({subscribe['bili_uid']}){'[艾特全体]' if subscribe['at_all'] == '1' else ''}\n"
+        message_raw += F"\t{index}. {subscribe['bili_nick_name']}({subscribe['bili_uid']}){'🎉艾特全体' if subscribe['at_all'] == 1 else ''}\n"
         index += 1
     return message_raw
 
