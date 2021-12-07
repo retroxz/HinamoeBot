@@ -2,7 +2,6 @@
 # coding=utf-8
 import datetime
 
-import nonebot
 from nonebot import on_startswith
 from dateutil.parser import parse
 from dateutil.relativedelta import relativedelta
@@ -17,21 +16,30 @@ from utils.config import Config
 PLUGIN_NAME = 'danmaku'
 DEFAULT_ROOM_ID = Config.danmaku['default_roomid']
 pd = Plugin_Data(PLUGIN_NAME)
+RANK_SIZE = Config.danmaku['rank_size']
 
 
-# danmaku_rank = on_startswith('#弹幕排行')
-#
-#
-# @danmaku_rank.handle()
-# async def _(bot: Bot, event:Event):
-#     current_date = {}
-#     try:
-#         current_date = parse(event.raw_message.split('#弹幕排行')[-1])
-#     except:
-#         await danmaku_rank.finish(F"日期格式不正确呀\n例如:05-02")
-#     # 查询此人绑定的直播间
-#     pd.query(Config(id=event))
-#     # result = await danmaku_rank(current_date,)
+danmaku_rank = on_startswith('弹幕排行')
+
+
+@danmaku_rank.handle()
+async def _(bot: Bot, event: Event):
+    current_date = datetime.now()
+    try:
+        if event.raw_message.split('弹幕排行')[1]:
+            current_date = parse(event.raw_message.split('弹幕排行')[-1])
+    except:
+        await danmaku_rank.finish(F"日期格式不正确呀\n例如:05-02")
+
+    result = await queryDanmakuRankByDate(DEFAULT_ROOM_ID, current_date)
+    reply_message = F"{current_date.strftime('%Y-%m-%d')} 弹幕TOP{RANK_SIZE}\n"
+    if len(result) > 0:
+        index = 1
+        for raw in result:
+            reply_message = reply_message + F"{index}. {raw['uname']}: {raw['danmaku']}\n"
+            index = index + 1
+    await danmaku_rank.finish(reply_message)
+
 
 async def search_user(username):
     return httpx.get('http://api.bilibili.com/x/web-interface/search/type', params={
@@ -63,9 +71,9 @@ async def _(bot: Bot, event: Event):
     query_date = None
     try:
         # 转换日期格式
-        params[1].replace('.','')
-        params[1].replace('-','')
-        params[1].replace('/','')
+        params[1].replace('.', '')
+        params[1].replace('-', '')
+        params[1].replace('/', '')
         if len(params[1]) == 4:
             params[1] = F"{datetime.now().year}{params[1]}"
         query_date = parse(params[1])
