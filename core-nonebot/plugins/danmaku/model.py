@@ -7,7 +7,7 @@ PAGE_SIZE = Config.danmaku['page_size']
 RANK_SIZE = Config.danmaku['rank_size']
 
 
-async def queryDanmakuRankByDate(room_id, current_date=datetime.now()):
+async def query_danmaku_rank_by_date(room_id, current_date=datetime.now()):
     sql = F"""
             SELECT uname, COUNT(*) AS 'danmaku' FROM bili.bili_danmaku 
                 WHERE timestamp > UNIX_TIMESTAMP('{current_date.strftime('%Y-%m-%d')} 00:00:00')* 1000 
@@ -24,3 +24,9 @@ async def query_danmaku_list(room_id, query_date, uid, page=1):
           "AND room_id = %s AND uid = %s ORDER BY timestamp LIMIT %s,%s"
 
     return await db_query(sql, (query_date, room_id, uid, page_offset, PAGE_SIZE))
+
+
+async def query_random_danmaku(room_id, uid):
+    sql = F"SELECT  FROM_UNIXTIME(timestamp / 1000, '%%Y-%%m-%%d') AS timestamp, msg FROM bili.bili_danmaku " \
+          F"WHERE uid={uid} AND room_id={room_id} ORDER  BY rand() LIMIT {RANK_SIZE}"
+    return await db_query(sql)

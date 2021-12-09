@@ -12,12 +12,10 @@ from .config import *
 import httpx
 from utils.config import Config
 
-
 PLUGIN_NAME = 'danmaku'
 DEFAULT_ROOM_ID = Config.danmaku['default_roomid']
 pd = Plugin_Data(PLUGIN_NAME)
 RANK_SIZE = Config.danmaku['rank_size']
-
 
 danmaku_rank = on_startswith('弹幕排行')
 
@@ -31,7 +29,7 @@ async def _(bot: Bot, event: Event):
     except:
         await danmaku_rank.finish(F"日期格式不正确呀\n例如:05-02")
 
-    result = await queryDanmakuRankByDate(DEFAULT_ROOM_ID, current_date)
+    result = await query_danmaku_rank_by_date(DEFAULT_ROOM_ID, current_date)
     reply_message = F"{current_date.strftime('%Y-%m-%d')} 弹幕TOP{RANK_SIZE}\n"
     if len(result) > 0:
         index = 1
@@ -41,28 +39,13 @@ async def _(bot: Bot, event: Event):
     await danmaku_rank.finish(reply_message)
 
 
-async def search_user(username):
-    return httpx.get('http://api.bilibili.com/x/web-interface/search/type', params={
-        'keyword': username,
-        'search_type': 'bili_user'
-    }).json()['data']
-
-
-async def validate_data(raws, date):
-    index = 0
-    for raw in raws:
-        if raw['timestamp'] > int(date.timestamp() * 1000):
-            break
-        index += 1
-    return raws[:index]
-
 query_danmaku = on_startswith('查询弹幕')
 
 
 @query_danmaku.handle()
 async def _(bot: Bot, event: Event):
     params = event.raw_message.split()
-    del(params[0])
+    del (params[0])
     # 验证参数
     if len(params) < 2:
         await query_danmaku.finish(F"参数格式不正确呀\n例如: 查询弹幕 永雏塔菲 2021-08-01 2(可选)")
@@ -83,7 +66,7 @@ async def _(bot: Bot, event: Event):
         await query_danmaku.finish(F"日期格式不正确呀\n例如: 查询弹幕 永雏塔菲 2021-08-01 2")
 
     # 查找指定用户
-    username= params[0]
+    username = params[0]
     res = await search_user(username)
     if res['numResults'] == 0:
         await query_danmaku.finish(F"找不到用户[{username}]")
@@ -108,3 +91,45 @@ async def _(bot: Bot, event: Event):
         index += 1
 
     await query_danmaku.finish(reply_message)
+
+
+random_danmaku = on_startswith('弹幕语录')
+
+
+@random_danmaku.handle()
+async def _(bot: Bot, event: Event):
+    username = event.raw_message.split('弹幕语录')[1]
+    if not username:
+        await random_danmaku.finish()
+
+    # 查询用户uid
+    res = await search_user(username)
+    if res['numResults'] == 0:
+        await query_danmaku.finish(F"找不到用户[{username}]")
+    # 保存uid
+    uid = res['result'][0]['mid']
+    # 查询弹幕
+    danmaku_list = await query_random_danmaku(DEFAULT_ROOM_ID, uid)
+    if len(danmaku_list) == 0:
+        await query_danmaku.finish(F"找不到用户[{username}]的弹幕记录")
+    # 构建返回
+    reply_message = F"{username}的弹幕语录\n"
+    for danmaku in danmaku_list:
+        reply_message = reply_message + F"{danmaku['timestamp']}: {danmaku['msg']}\n"
+    await query_danmaku.finish(reply_message)
+
+
+async def search_user(username):
+    return httpx.get('http://api.bilibili.com/x/web-interface/search/type', params={
+        'keyword': username,
+        'search_type': 'bili_user'
+    }).json()['data']
+
+
+async def validate_data(raws, date):
+    index = 0
+    for raw in raws:
+        if raw['timestamp'] > int(date.timestamp() * 1000):
+            break
+        index += 1
+    return raws[:index]
