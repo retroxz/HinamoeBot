@@ -68,9 +68,9 @@ exports.danmakuHelp = async function (message) {
     let danmakuHelpMsg = `弹幕库功能\n1. 【弹幕排行】每日弹幕排行 后面跟两位数日期可以查询指定日期排行\n例如: 弹幕排行03-05\n2. 【弹幕语录XXX】随机显示XXX十条弹幕 可以填入昵称或UID\n注意: 每个群弹幕库不同 例如薯条相关群就是薯条弹幕库`
     message.reply(danmakuHelpMsg)
 }
-commandsMap.set('弹幕排行', exports.danmakuRank)
+// commandsMap.set('弹幕排行', exports.danmakuRank)
 commandsMap.set('弹幕语录', exports.danmakuRandom)
-commandsMap.set('弹幕帮助', exports.danmakuHelp)
+// commandsMap.set('弹幕帮助', exports.danmakuHelp)
 
 exports.match = function (message) {
     const plain = message.plain
