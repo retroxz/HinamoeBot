@@ -13,23 +13,19 @@ from ..model.live_push_log import query_last_push_log, add_live_start_push_log, 
 from ..api.live import get_live_status_by_uids
 from ..utils.push_manager import generate_live_start_message, generate_live_end_message
 from utils import send_message
+from ..utils import filter_subscribes
 
 scheduler = require("nonebot_plugin_apscheduler").scheduler
 
 
-@scheduler.scheduled_job('interval', seconds=30)
+# @scheduler.scheduled_job('interval', seconds=30)
 async def get_live_status_task():
-    sub_data = {}
+    """
+    定时任务: 检测直播状态
+    :return:
+    """
     raws = await query_subscribe()
-    for raw in raws:
-        if not sub_data.get(raw['bili_uid']):
-            sub_data[raw['bili_uid']] = []
-        sub_data[raw['bili_uid']].append({
-            'qid': raw['qid'],
-            'qtype': raw['qtype'],
-            'qname': raw['qname'],
-            'at_all': raw['at_all']
-        })
+    sub_data = filter_subscribes(raws)
     sub_uids = list(sub_data.keys())
     live_status_list = list((await get_live_status_by_uids(sub_uids)).values())
     for live in live_status_list:

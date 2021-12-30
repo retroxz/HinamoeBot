@@ -55,17 +55,17 @@ async def query_subscribe(event=None, uid=None):
 
     # 获取事件类型和群号
     if event is None:
-        sql = 'SELECT qid,qname,qtype,at_all,bili_uid,bili_room_id FROM  bot.bili_subscribes'
+        sql = 'SELECT qid,qname,qtype,at_all,bili_uid,bili_room_id,last_dynamic_time FROM  bot.bili_subscribes'
         return await db_query(sql)
     elif uid is None:
         qtype, qid = get_event_id_and_type(event)
-        sql = F"SELECT id,qid,qname,qtype,bili_uid,bili_room_id,bili_nick_name,at_all FROM bot.bili_subscribes " \
-              F"WHERE qtype=%s AND qid=%s"
+        sql = F"SELECT id,qid,qname,qtype,bili_uid,bili_room_id,bili_nick_name,at_all,last_dynamic_time " \
+              F"FROM bot.bili_subscribes WHERE qtype=%s AND qid=%s"
         return await db_query(sql, [qtype, qid])
     else:
         qtype, qid = get_event_id_and_type(event)
-        sql = F"SELECT id,qid,qname,qtype,bili_uid,bili_room_id,bili_nick_name,at_all FROM bot.bili_subscribes " \
-              F"WHERE bili_uid=%s AND qtype=%s AND qid=%s"
+        sql = F"SELECT id,qid,qname,qtype,bili_uid,bili_room_id,bili_nick_name,at_all,last_dynamic_time " \
+              F"FROM bot.bili_subscribes WHERE bili_uid=%s AND qtype=%s AND qid=%s"
         # 查询数据库
         return await db_query(sql, [uid, qtype, qid])
 

@@ -7,18 +7,14 @@
 __author__ = "retroxz"
 
 from plugins.bilibili.api.base_request import request
-from plugins.bilibili.utils.cache_bot import cache
 
 
-class dynamic:
-    @classmethod
-    async def get_new_dynamic(cls):
-        url = 'https://api.vc.bilibili.com/dynamic_svr/v1/dynamic_svr/dynamic_new'
-        cookies = cache.get('bili_cookie')
-        params = {
-            'type_list': '268435455',
-            'from': 'weball',
-            'platform': 'web',
-        }
-        return await request('GET', url, params=params, cookies=cookies)
+async def get_new_dynamic(uid, offset_dynamic_id='0'):
+    url = 'https://api.vc.bilibili.com/dynamic_svr/v1/dynamic_svr/space_history'
+    params = {
+        'host_uid': uid,
+        'offset_dynamic_id': offset_dynamic_id,
+        'need_top': '0'
+    }
+    return await request('GET', url, params=params)
 
