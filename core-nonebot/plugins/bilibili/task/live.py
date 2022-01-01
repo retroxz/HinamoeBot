@@ -18,7 +18,7 @@ from ..utils import filter_subscribes
 scheduler = require("nonebot_plugin_apscheduler").scheduler
 
 
-# @scheduler.scheduled_job('interval', seconds=30)
+@scheduler.scheduled_job('interval', seconds=30)
 async def get_live_status_task():
     """
     定时任务: 检测直播状态
