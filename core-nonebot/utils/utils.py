@@ -26,7 +26,10 @@ def load_plugins():
     :return:
     """
     for plugin in Config.plugins:
-        nonebot.load_plugin(F"plugins.{plugin}")
+        if plugin.startswith('nonebot'):
+            nonebot.load_plugin(plugin)
+        else:
+            nonebot.load_plugin(F"plugins.{plugin}")
 
 
 def print_copy_right():

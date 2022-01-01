@@ -15,10 +15,12 @@ def filter_subscribes(subscribes):
         if not result.get(subscribe['bili_uid']):
             result[subscribe['bili_uid']] = []
         result[subscribe['bili_uid']].append({
+            'id': subscribe['id'],
             'qid': subscribe['qid'],
             'qtype': subscribe['qtype'],
             'qname': subscribe['qname'],
             'at_all': subscribe['at_all'],
+            'last_dynamic_id': subscribe['last_dynamic_id'],
             'last_dynamic_time': subscribe['last_dynamic_time']
         })
     return result

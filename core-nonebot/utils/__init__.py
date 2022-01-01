@@ -129,8 +129,8 @@ async def send_message(message, qid, qtype, bot=None):
                                'user_id' if qtype == 'private' else 'group_id': qid,
                                'message': message
                            })
-    except ActionFailed:
-        logger.error(F"Bot({bot.self_id})向{'群组' if qtype == 'group' else '好友'}({qid})发送消息失败，请查看客户端日志\n消息原文:\n{message}")
+    except ActionFailed as e:
+        logger.error(F"Bot({bot.self_id})向{'群组' if qtype == 'group' else '好友'}({qid})发送消息失败，{e.info['msg']}({e.info['wording']})\n消息原文:\n{message}")
 
 
 async def send_private_message(message, qid, bot=None):
