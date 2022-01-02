@@ -64,7 +64,7 @@ async def filter_new_dynamic(sub, dynamics):
             2048 B站特殊活动分享
 
         """
-        if dynamic['desc']['type'] not in [1, 4, 2, 8]:
+        if dynamic['desc']['type'] not in [1, 4, 2, 8, 64, 2048]:
             logger.warning(F"不可解析的动态类型{dynamic}")
             continue
         # 检查每条动态是否在数据库保存的最新动态之后
@@ -138,5 +138,21 @@ def generate_dynamic_push_message(dynamic):
         if 'pictures' in card['item'].keys():
             for pic in card['item']['pictures']:
                 message = message + str(MessageSegment.image(file=pic['img_src']))
+
+    # 解析专栏动态
+    if dynamic_type == 64:
+        message = F"""
+        {uname}发布了专栏
+        标题: {card['title']}
+        传送门: https://t.bilibili.com/{dynamic['desc']['dynamic_id']}
+        """
+
+    # 解析活动分享动态
+    if dynamic_type == 2048:
+        message = F"""
+        {uname}发布了动态
+        {card['vest']['content']}
+        传送门: https://t.bilibili.com/{dynamic['desc']['dynamic_id']}
+        """
 
     return inspect.cleandoc(message)

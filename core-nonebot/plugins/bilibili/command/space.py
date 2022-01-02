@@ -10,7 +10,6 @@ from nonebot.adapters.cqhttp import Bot, Event, MessageSegment, Message
 from ..api.space import get_user_space_info, get_user_card_info
 from ..api.search import search_user_uid
 from ..exception import BiliUserNotFoundException
-from ..task.live import get_live_status_task
 from ..task.dynamic import get_new_dynamic_task
 import inspect
 
@@ -41,6 +40,6 @@ async def _(bot: Bot, event: Event):
         await uid_info.send(e.__str__())
 
 
-@test.handle()
+# @test.handle()
 async def _(bot: Bot, event: Event):
     await get_new_dynamic_task()
