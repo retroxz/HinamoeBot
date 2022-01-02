@@ -7,7 +7,6 @@
 @GitHub     :https://github.com/retroxz
 """
 
-from nonebot import require
 from ..model.subscribe import query_subscribe
 from ..model.live_push_log import query_last_push_log, add_live_start_push_log, add_live_end_push_log
 from ..api.live import get_live_status_by_uids
@@ -15,10 +14,7 @@ from ..utils.push_manager import generate_live_start_message, generate_live_end_
 from utils import send_message
 from ..utils import filter_subscribes
 
-scheduler = require("nonebot_plugin_apscheduler").scheduler
 
-
-@scheduler.scheduled_job('interval', seconds=30)
 async def get_live_status_task():
     """
     定时任务: 检测直播状态

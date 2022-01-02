@@ -6,7 +6,6 @@
 
 __author__ = "retroxz"
 
-from nonebot import require
 from ..model.subscribe import query_subscribe, update_last_dynamic_time
 from ..utils import filter_subscribes
 from ..api.dynamic import get_new_dynamic
@@ -17,10 +16,7 @@ from nonebot.adapters.cqhttp import MessageSegment
 from utils import send_message
 import inspect
 
-scheduler = require("nonebot_plugin_apscheduler").scheduler
 
-
-@scheduler.scheduled_job('interval', seconds=30)
 async def get_new_dynamic_task():
     """
     获取新动态并推送任务
