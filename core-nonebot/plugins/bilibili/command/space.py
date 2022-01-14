@@ -13,7 +13,7 @@ from ..exception import BiliUserNotFoundException
 from ..task.dynamic import get_new_dynamic_task
 import inspect
 
-uid_info = on_command('uid')
+uid_info = on_command('uid信息')
 
 test = on_command('test')
 
