@@ -1,7 +1,7 @@
 # !/usr/bin/env python3
 # coding=utf-8
 
-from nonebot import on_keyword
+from nonebot import on_keyword, on_startswith
 from nonebot.adapters import Bot, Event
 from .greetings import Greeting
 from .model import query_greeting_log, add_greeting_log
@@ -10,8 +10,12 @@ from datetime import datetime
 from utils import get_group_info
 import inspect
 
-morning = on_keyword({'早', '早安', '早啊', '早呀', '早上好', '早上花'})
-night = on_keyword({'晚安', '睡了'})
+morning_keyword = {'早安', '早啊', '早呀', '早上好', '早上花'}
+night_keyword = {'晚安', '睡了'}
+
+
+morning = on_keyword(morning_keyword)
+night = on_keyword(night_keyword)
 
 
 @morning.handle()
