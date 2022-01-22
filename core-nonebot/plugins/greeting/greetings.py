@@ -3,6 +3,8 @@
 
 from string import Template
 import inspect
+
+
 class Greeting:
     morning_early = Template('天还没亮呢，再睡一会吧！')
     morning = Template('''
