@@ -112,11 +112,24 @@ def generate_dynamic_push_message(dynamic):
 
         # 转发类型: 动态
         if 'user' in origin_dynamic.keys():
-            message = message + F"{origin_dynamic['user']['name']}: {origin_dynamic['item']['description']}"
+            # Todo 转发自己的动态和转发其他人的动态数据名称不同
+            try:
+                origin_uname = origin_dynamic['user']['name']
+            except KeyError:
+                # 转发自己的动态
+                origin_uname = origin_dynamic['user']['uname']
+            try:
+                origin_description = origin_dynamic['item']['description']
+            except KeyError:
+                # 转发自己的动态
+                origin_description = origin_dynamic['item']['content']
+
+            message = message + F"{origin_uname}: {origin_description}"
             # 添加图片
-            pictures = origin_dynamic['item']['pictures']
-            for pic in pictures:
-                message = message + str(MessageSegment.image(file=pic['img_src']))
+            pictures = origin_dynamic['item'].get('pictures')
+            if 'pictures' in origin_dynamic['item'].keys():
+                for pic in pictures:
+                    message = message + str(MessageSegment.image(file=pic['img_src']))
 
         # 转发类型: 视频
         if 'aid' in origin_dynamic.keys():
