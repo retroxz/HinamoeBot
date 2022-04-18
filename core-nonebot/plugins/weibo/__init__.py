@@ -71,7 +71,7 @@ async def send_wb_message(push_group_list, wb_list):
 
 scheduler = require('nonebot_plugin_apscheduler').scheduler
 
-scheduler.add_job(push_wb, "interval", seconds=20, id="xxx")
+scheduler.add_job(push_wb, "interval", seconds=100, id="xxx")
 
 wb_push_on = on_command('开启微博推送')
 

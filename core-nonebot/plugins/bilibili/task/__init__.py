@@ -15,7 +15,7 @@ from .live import get_live_status_task
 scheduler = require("nonebot_plugin_apscheduler").scheduler
 
 
-@scheduler.scheduled_job('interval', seconds=20)
+@scheduler.scheduled_job('interval', seconds=45)
 async def task():
     """
     定时任务入口
