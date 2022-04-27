@@ -3,8 +3,8 @@
 from datetime import datetime
 from utils.db import db_query
 from utils.config import Config
-PAGE_SIZE = Config.danmaku['page_size']
-RANK_SIZE = Config.danmaku['rank_size']
+PAGE_SIZE = Config.get('danmaku.page_size')
+RANK_SIZE = Config.get('danmaku.rank_size')
 
 
 async def query_danmaku_rank_by_date(room_id, current_date=datetime.now()):

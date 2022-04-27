@@ -13,9 +13,11 @@ import httpx
 from utils.config import Config
 
 PLUGIN_NAME = 'danmaku'
-DEFAULT_ROOM_ID = Config.danmaku['default_roomid']
+
+DEFAULT_ROOM_ID = Config.get('danmaku.default_room_id')
+RANK_SIZE = Config.get('danmaku.rank_size')
 pd = Plugin_Data(PLUGIN_NAME)
-RANK_SIZE = Config.danmaku['rank_size']
+
 
 danmaku_rank = on_startswith('弹幕排行')
 

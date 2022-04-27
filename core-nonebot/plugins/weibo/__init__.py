@@ -1,5 +1,8 @@
 #!/usr/bin/env python
 # -*-coding:utf-8 -*-
+import sys
+import sysconfig
+
 import nonebot
 from nonebot import on_command
 from nonebot.adapters.cqhttp import MessageSegment, Message, MessageEvent
@@ -25,7 +28,7 @@ async def push_wb():
         last_push_date = push_log[0]['pushed_date']
     # 查询数据库
     sql = F"SELECT * FROM weibo.weibo WHERE publish_time > '{last_push_date}' ORDER BY publish_time DESC"
-    res = await db_query(sql)
+    res = await db_query(sql, source='old')
     if res:
         pd.db.table('Pushed').truncate()
         pd.add(Pushed(str(res[0]['publish_time'])))
@@ -71,7 +74,7 @@ async def send_wb_message(push_group_list, wb_list):
 
 scheduler = require('nonebot_plugin_apscheduler').scheduler
 
-scheduler.add_job(push_wb, "interval", seconds=100, id="xxx")
+scheduler.add_job(push_wb, "interval", seconds=5, id="xxx")
 
 wb_push_on = on_command('开启微博推送')
 
