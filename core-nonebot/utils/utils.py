@@ -7,6 +7,8 @@ import nonebot
 from utils.plugin_data import PLUGINS_DATA_DIR
 from utils.config import Config
 from colorama import init as colorInit
+from .logger import logger
+from datetime import datetime
 
 BOT_PATH = os.path.abspath(os.path.join(os.path.expanduser('~'), '.hinamoe/bot'))
 
@@ -25,11 +27,17 @@ def load_plugins():
     加载插件
     :return:
     """
-    for plugin in Config.plugins:
+    plugins_index = 0
+    for plugin in Config.get('plugins', []):
         if plugin.startswith('nonebot'):
             nonebot.load_plugin(plugin)
         else:
             nonebot.load_plugin(F"plugins.{plugin}")
+        plugins_index = plugins_index + 1
+    if plugins_index == 0:
+        logger.warning(F"Bot未加载任何插件")
+    else:
+        logger.success(F"Bot已加载{plugins_index}个插件")
 
 
 def print_copy_right():
@@ -42,7 +50,7 @@ def print_copy_right():
  | |  | | | | | | (_| | | | | | | (_) |  __/ |_) | (_) | |_ 
  |_|  |_|_|_| |_|\__,_|_| |_| |_|\___/ \___|____/ \___/ \__|   
  
-Copyright © 2019-2021 HinamoeOfficial,All Rights Reserved
+Copyright © 2019-{datetime.now().strftime('%Y')} HinamoeOfficial,All Rights Reserved
 Project: https://github.com/retroxz/HinamoeBot
 BOT数据目录: {BOT_PATH}                                                
 """ + "\033[0m"
