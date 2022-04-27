@@ -17,15 +17,18 @@ class Config:
 
     @staticmethod
     def get(keys='', default=None):
-        if Config._Config is None:
-            Config.config_init()
+        try:
+            if Config._Config is None:
+                Config.config_init()
 
-        if keys == '':
-            return Config._Config
-        value = eval(F"Config._Config.{keys}")
-        if value is None:
+            if keys == '':
+                return Config._Config
+            value = eval(F"Config._Config.{keys}")
+            if value is None:
+                return default
+            return value
+        except AttributeError:
             return default
-        return value
 
     @staticmethod
     def config_init():
