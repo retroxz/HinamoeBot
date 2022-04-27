@@ -13,12 +13,13 @@ from utils.plugin_data import Plugin_Data
 from utils.db import db_query
 from utils import is_admin
 import inspect
-from .config import *
+from utils.config import Config
 from utils import send_message
 
 # Todo 以后再优化
 PLUGIN_NAME = 'weibo'
 pd = Plugin_Data(PLUGIN_NAME)
+interval = Config.get('weibo.interval', 30)
 
 
 async def push_wb():
@@ -74,7 +75,7 @@ async def send_wb_message(push_group_list, wb_list):
 
 scheduler = require('nonebot_plugin_apscheduler').scheduler
 
-scheduler.add_job(push_wb, "interval", seconds=5, id="xxx")
+scheduler.add_job(push_wb, "interval", seconds=interval, id="xxx")
 
 wb_push_on = on_command('开启微博推送')
 
