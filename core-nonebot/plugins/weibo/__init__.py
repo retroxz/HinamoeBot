@@ -84,7 +84,8 @@ wb_push_on = on_command('开启微博推送')
 
 @wb_push_on.handle()
 async def _(bot: Bot, event: MessageEvent, state: T_State):
-    if not is_admin(event, bot): return
+    if not is_admin(event, bot):
+        return
     if event.message_type == 'private':
         # 私聊消息
         query_group = PushGroup(id=event.user_id, type=event.message_type)
@@ -101,7 +102,8 @@ wb_push_off = on_command('关闭微博推送')
 
 @wb_push_off.handle()
 async def _(bot: Bot, event: MessageEvent, state: T_State):
-    if not is_admin(bot, event): return
+    if not is_admin(event, bot):
+        return
     if event.message_type == 'private':
         # 私聊消息
         query_group = PushGroup(id=event.user_id, type=event.message_type)
