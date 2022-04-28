@@ -9,6 +9,8 @@ from nonebot.adapters.cqhttp import MessageSegment, Message, MessageEvent
 from nonebot.plugin import require
 from nonebot.adapters import Bot
 from nonebot.typing import T_State
+
+from plugins.weibo.config import Pushed, PushGroup
 from utils.plugin_data import Plugin_Data
 from utils.db import db_query
 from utils import is_admin
