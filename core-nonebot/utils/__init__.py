@@ -65,7 +65,7 @@ def is_admin(event, bot=None):
 
     if bot is None:
         bot = list(nonebot.get_bots().values())[0]
-
+    print(nonebot.get_driver().config)
     if str(event.user_id) in bot.config.superusers:
         return True
     if event.message_type == 'private':
