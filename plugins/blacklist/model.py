@@ -23,3 +23,10 @@ class BlacklistModel:
         """
 
         return await db_query(sql)
+
+    @staticmethod
+    async def delete(qid):
+        sql = F"""
+            DELETE FROM bot.black_list WHERE qid={qid}
+        """
+        return await db_query(sql)
