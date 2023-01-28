@@ -1,0 +1,39 @@
+[tool.poetry]
+name = "hinamoebot"
+version = "0.1.0"
+description = ""
+authors = ["retroxz <zzxee666@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.8"
+python-dateutil = "^2.8.2"
+rich = "^13.3.1"
+tinydb = "^4.7.1"
+aiomysql = "^0.1.1"
+#pydantic = "^1.10.4"
+emoji = "^2.2.0"
+qrcode = "^7.3.1"
+cacheout = "^0.14.1"
+pymysql = "^1.0.2"
+pillow = "^9.4.0"
+lxml = "^4.9.2"
+aiohttp = "^3.8.3"
+#munch = "^2.5.0"
+httpx = "~0.17.0"
+nonebot-adapter-cqhttp = "2.0.0a13"
+nonebot2 = "2.0.0a13.post1"
+munch = "^2.5.0"
+setuptools = "^66.1.1"
+
+
+[[tool.poetry.source]]
+name = "tsinghua"
+url = "https://pypi.tuna.tsinghua.edu.cn/simple"
+default = true
+secondary = false
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
