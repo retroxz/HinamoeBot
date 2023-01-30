@@ -1,7 +1,7 @@
 from nonebot import on_command
 from nonebot.permission import SUPERUSER
 from nonebot import Bot
-from nonebot.adapters.cqhttp import GroupMessageEvent, PrivateMessageEvent
+from nonebot.adapters.onebot.v11 import GroupMessageEvent, PrivateMessageEvent
 from .model import BlacklistModel
 from cacheout import Cache
 from nonebot import get_driver
@@ -65,6 +65,7 @@ async def _(bot, event, state):
         if int(qid) in blacklist_cache.get('blacklist_users', []):
             logger.info(F"{qid}的消息已被屏蔽")
             raise Exception(F"{qid}的消息已被屏蔽")
+
 
 @delete_black_user.handle()
 async def _(bot, event, state):

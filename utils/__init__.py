@@ -11,8 +11,9 @@
 import re
 import nonebot
 from .plugin_data import Plugin_Data
-from nonebot.adapters.cqhttp import Bot, Event, Message
-from nonebot.adapters.cqhttp.exception import ActionFailed
+
+from nonebot.adapters.onebot.v11.adapter import Bot, Event, Message
+from nonebot.adapters.onebot.v11.exception import ActionFailed
 from .logger import logger
 
 
