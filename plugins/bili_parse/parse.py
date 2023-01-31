@@ -13,9 +13,10 @@ import asyncio
 import lxml.html
 import urllib.parse
 import time
-from nonebot.adapters.cqhttp import MessageSegment
+from nonebot.adapters.onebot.v11 import MessageSegment
 
 analysis_stat = {}  # analysis_stat: video_url(vurl)
+
 
 # 'https://t.bilibili.com/615507910611585906?share_medium=android&share_plat=android&share_source=QQ&share_tag=s_i&timestamp=1642147948&unique_k=sHITSiT'
 async def bili_keyword(group_id, text):

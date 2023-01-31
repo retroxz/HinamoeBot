@@ -10,7 +10,7 @@
 import re
 from .parse import b23_extract, bili_keyword
 from nonebot import on_regex
-from nonebot.adapters.cqhttp import Bot, Event, Message
+from nonebot.adapters.onebot.v11 import Bot, Event, Message
 
 analysis_bili = on_regex(
     r"(b23.tv)|(bili(22|23|33|2233).cn)|(live.bilibili.com)|(bilibili.com/(video|read|bangumi))|(^(av|cv)(\d+))|(^BV([a-zA-Z0-9]{10})+)|(\[\[QQ小程序\]哔哩哔哩\])|(QQ小程序&amp;#93;哔哩哔哩)|(QQ小程序&#93;哔哩哔哩)",

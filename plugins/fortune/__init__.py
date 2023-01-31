@@ -3,6 +3,8 @@ from hashlib import md5
 
 from nonebot import on_command
 from nonebot.adapters import Bot, Event
+from nonebot.adapters.onebot.v11 import Message
+from nonebot.params import CommandArg
 from nonebot.typing import T_State
 
 ex = ['大吉', '吉', '半吉', '小吉', '末吉', '大凶', '凶', '半凶', '小吉', '末凶']  # 求签结果选项
@@ -40,8 +42,8 @@ fortune = on_command("求签")  # 优先级为5
 
 
 @fortune.handle()
-async def handle_first_receive(bot: Bot, event: Event, state: T_State):
-    origin_raw = str(event.get_message())
+async def handle_first_receive(bot: Bot, event: Event, state: T_State, arg: Message = CommandArg()):
+    origin_raw = str(arg)
     raw = F"{origin_raw}{event.sender.user_id}{datetime.now().strftime('%Y%m%d')}"
     # 如果结果不为空，就存入T_State
     if origin_raw:
