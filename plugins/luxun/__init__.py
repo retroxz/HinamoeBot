@@ -1,11 +1,13 @@
-from configs.path_config import IMAGE_PATH
+from utils.config import Config
 from nonebot import on_command
 from nonebot.typing import T_State
 from nonebot.adapters.onebot.v11 import MessageEvent, GroupMessageEvent, Message
 from utils.message_builder import image
-from services.log import logger
-from utils.image_utils import BuildImage
+from utils.image import BuildImage
 from nonebot.params import CommandArg
+from utils.logger import logger
+
+IMAGE_PATH = Config.get('bot.path.image')
 
 __zx_plugin_name__ = "鲁迅说"
 __plugin_usage__ = """

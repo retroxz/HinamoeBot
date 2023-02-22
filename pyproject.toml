@@ -28,6 +28,9 @@ setuptools = "^66.1.1"
 nonebot-adapter-onebot = "^2.2.1"
 pyyaml = "^6.0"
 bs4 = "^0.0.1"
+opencv-python = "^4.7.0.68"
+imagehash = "^4.3.1"
+matplotlib = "^3.7.0"
 
 
 [[tool.poetry.source]]
